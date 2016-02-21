@@ -50,7 +50,9 @@ class Bot(categories:List[Category]){
         // We save the current response, and use it to match <that/> next time
         val response = category.response(this)
         lastResponse = Some(response)
-        response// + ":" + category.stimulus.patternElements.mkString(",") + ":" + category.response.templateElements.mkString(",")
+        response
+        // + ":" + category
+        // + ":" + category.stimulus.patternElements.mkString(",") + ":" + category.response.templateElements.mkString(",")
       }
       case None => ""
     }
@@ -97,8 +99,7 @@ object Bot {
         new Pattern( (category \ "pattern").text),
         new Template(parseTemplate( (category \ "template").head)),
         ((category \ "that").text) match {
-          case null => None;
-          case "" => None;
+          case "" => None
           case that:String => Some(new Pattern(that))},
         None
       )
