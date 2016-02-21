@@ -1,0 +1,1 @@
+class WildStar extends PatternElement

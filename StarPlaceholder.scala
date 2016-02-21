@@ -1,0 +1,1 @@
+class StarPlaceholder extends Placeholder with TemplateElement
