@@ -1,3 +1,6 @@
+/*
+The * wildcar pattern element.
+*/
 class WildStar extends PatternElement
 
 object WildStar {

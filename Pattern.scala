@@ -1,3 +1,6 @@
+/*
+Represents a pattern that has to be matched by user input.
+*/
 case class Pattern(patternElements:List[PatternElement]){
 
   def this(stringPattern:String) = {this(

@@ -73,7 +73,7 @@ object Bot {
             // The node name ("label") indicates the type template element to create
             => wordNode.label match {
               // A <star/> node indicates that the element should be replaced by the star pattern
-              case "star" => List(StarPlaceholder())
+              case "star" => List(TemplateStar())
               // Otherwise we assume it's text
               case _ => wordNode.text.split(" ").map({case templateWord:String => TemplateWord(templateWord)}).toList}
           // If the current node has children then it needs to be instantied to a complex template element
