@@ -1,6 +1,11 @@
 import scala.xml.{XML, Node, Elem, Text}
 
-case class Bot(categories:List[Category]){
+/*
+This class implements part of the AIML language.
+You can build from an xml specification, and the interrogate the both with the apply metod.
+botInstance("your question here")
+*/
+class Bot(categories:List[Category]){
   var lastResponse:Option[String] = None
   var context:Option[PatternContext] = None
 
@@ -68,7 +73,7 @@ object Bot {
             // The node name ("label") indicates the type template element to create
             => wordNode.label match {
               // A <star/> node indicates that the element should be replaced by the star pattern
-              case "star" => List(new StarPlaceholder())
+              case "star" => List(StarPlaceholder())
               // Otherwise we assume it's text
               case _ => wordNode.text.split(" ").map({case templateWord:String => TemplateWord(templateWord)}).toList}
           // If the current node has children then it needs to be instantied to a complex template element
@@ -89,9 +94,9 @@ object Bot {
       }
 
       Category(
-        new Pattern(category \ "pattern" text),
-        new Template(parseTemplate(category \ "template" head)),
-        (category \ "that" text) match {
+        new Pattern( (category \ "pattern").text),
+        new Template(parseTemplate( (category \ "template").head)),
+        ((category \ "that").text) match {
           case null => None;
           case "" => None;
           case that:String => Some(new Pattern(that))},
@@ -106,11 +111,11 @@ object Bot {
   }).toList
   }
 
-  def fromCategories(categories:List[Category]):Bot = new Bot(categories)
+  def apply(categories:List[Category]):Bot = new Bot(categories)
 
-  def fromFileName(fileName:String) = fromCategories(categoriesFromXML(XML.loadFile(fileName)))
+  def apply(fileName:String):Bot = apply(categoriesFromXML(XML.loadFile(fileName)))
 
-  def fromFileNames(fileNames:List[String]) = fromCategories(fileNames.flatMap({case fileName =>
+  def fromFIles(fileNames:List[String]):Bot = apply(fileNames.flatMap({case fileName =>
     try {
       categoriesFromXML(XML.loadFile(fileName))
     } catch {

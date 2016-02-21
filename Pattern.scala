@@ -2,8 +2,8 @@ case class Pattern(patternElements:List[PatternElement]){
 
   def this(stringPattern:String) = {this(
    stringPattern.split(" ").map({
-      case "*" => new WildStar()
-      case "_" => new WildUnder()
+      case "*" => WildStar()
+      case "_" => WildUnder()
       case patternWord:String => PatternWord(patternWord)}).toList
   )}
 
