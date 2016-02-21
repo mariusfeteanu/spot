@@ -50,7 +50,7 @@ class Bot(categories:List[Category]){
         // We save the current response, and use it to match <that/> next time
         val response = category.response(this)
         lastResponse = Some(response)
-        "["+response+"]"
+        response
       }
       case None => ""
     }
