@@ -1,6 +1,7 @@
 This is spot the bot.
 
 You need:
+
 1. Scala: http://www.scala-lang.org/download/
 2. Sbt: http://www.scala-sbt.org/download.html
 
