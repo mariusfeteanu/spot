@@ -17,6 +17,7 @@ case class Pattern(patternElements:List[PatternElement]){
   - checks that the input matches
   - return None if it doesn't match
   - returns the match context if matched
+  TODO: this nukes the context on success
   */
   def apply(input:Seq[String], context:Option[PatternContext]):Option[PatternContext] = {
     /* Look at the current input to see if it matches */
@@ -33,17 +34,27 @@ case class Pattern(patternElements:List[PatternElement]){
         // If we are out out pattern elements and we still have some input then we don't have a match
         case Nil => None
         // Check that the word actually matches
-        case _ => patternElements.head match{
+        case _ => patternElements.head match {
           // The underscore wildcard has highes priority
-          case _:WildUnder
+          case _:WildUnder /* We try to match the wild card on the tail*/
           //TODO: This not tail recursive, but making it so is ugly, what do?
-            => Pattern(patternElements.tail)(input.tail, context)
+            => Pattern(patternElements.tail)(input.tail, context) match {
+              /* and if it doesn't work, try the full remaining pattern again */
+              case None => Pattern(patternElements)(input.tail, context)
+              /* Return the match we found */
+              case found => found
+            }
           // If the current word matches the current pattern we can continue
           case patternWord:PatternWord if this.cleanString(patternWord.word) == this.cleanString(input.head)
             => Pattern(patternElements.tail)(input.tail, context)
           // The start wildcard has lowest priority
-          case _:WildStar
-            => Pattern(patternElements.tail)(input.tail, Some(PatternContext(input.head)))
+          case _:WildStar /* We try to match the wild card on the tail*/
+            => Pattern(patternElements.tail)(input.tail, Some(PatternContext(input.head))) match {
+              /* and if it doesn't work, try the full remaining pattern again */
+              case None => Pattern(patternElements)(input.tail, Some(PatternContext(input.head)))
+              /* Return the match we found */
+              case found => found
+            }
           // If the current word does not match the current pattern (and no wild cards were matched) then we give up
           case patternWord:PatternWord
             => None
