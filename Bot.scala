@@ -50,7 +50,7 @@ class Bot(categories:List[Category]){
         // We save the current response, and use it to match <that/> next time
         val response = category.response(this)
         lastResponse = Some(response)
-        response
+        response// + ":" + category.stimulus.patternElements.mkString(",") + ":" + category.response.templateElements.mkString(",")
       }
       case None => ""
     }
@@ -115,7 +115,7 @@ object Bot {
 
   def apply(fileName:String):Bot = apply(categoriesFromXML(XML.loadFile(fileName)))
 
-  def fromFIles(fileNames:List[String]):Bot = apply(fileNames.flatMap({case fileName =>
+  def fromFileNames(fileNames:List[String]):Bot = apply(fileNames.flatMap({case fileName =>
     try {
       categoriesFromXML(XML.loadFile(fileName))
     } catch {

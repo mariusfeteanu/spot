@@ -10,6 +10,7 @@ libraryDependencies += "org.scala-lang" % "scala-xml" % "2.11.0-M4"
 mainClass in Compile := Some("Run")
 
 scalacOptions ++= Seq("-feature")
+scalacOptions ++= Seq("-deprecation")
 
 // META-INF discarding
 mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
