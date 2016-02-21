@@ -7,3 +7,8 @@ src_managed/
 project/boot/
 .history
 .cache
+
+# AIML datasets
+# http://www.alicebot.org/downloads/sets.html
+
+aiml/

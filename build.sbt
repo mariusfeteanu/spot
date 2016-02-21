@@ -7,6 +7,8 @@ lazy val root = (project in file(".")).
 
 libraryDependencies += "org.scala-lang" % "scala-xml" % "2.11.0-M4"
 
+mainClass in Compile := Some("Run")
+
 // META-INF discarding
 mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
    {
