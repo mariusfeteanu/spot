@@ -1,3 +1,5 @@
+package com.spotai
+
 /*
 A template for the bots response.
 */
@@ -12,7 +14,7 @@ case class Template(templateElements:List[TemplateElement]){
         case Some(context:PatternContext) => context.star
         case None => ""
       }
-    case _=> "?"
+    case _ => ???
   }).mkString(" ")
   }
 }

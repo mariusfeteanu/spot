@@ -1,3 +1,5 @@
+package com.spotai
+
 /*
 Represents a pattern that has to be matched by user input.
 */

@@ -7,7 +7,7 @@ lazy val root = (project in file(".")).
 
 libraryDependencies += "org.scala-lang" % "scala-xml" % "2.11.0-M4"
 
-mainClass in Compile := Some("Run")
+mainClass in Compile := Some("com.spotai.main.Run")
 
 scalacOptions ++= Seq("-feature")
 scalacOptions ++= Seq("-deprecation")

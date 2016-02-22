@@ -1,3 +1,5 @@
+package com.spotai
+
 /*
 A srai recursive template element, will be produced by asking the bot to evaluate it's contents
 as a question

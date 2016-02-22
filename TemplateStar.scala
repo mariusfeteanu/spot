@@ -1,3 +1,5 @@
+package com.spotai
+
 /*
 The <star/> element of a template, will be replaced by the words that matched * (WildStar) if any.
 */

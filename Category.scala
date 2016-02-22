@@ -1,3 +1,5 @@
+package com.spotai
+
 /*
 Represents an AIML category.
 */

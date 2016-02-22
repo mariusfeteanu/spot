@@ -1,3 +1,5 @@
+package com.spotai
+
 import scala.xml.{XML, Node, Elem, Text}
 
 /*

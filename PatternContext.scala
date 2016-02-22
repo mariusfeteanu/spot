@@ -1,3 +1,5 @@
+package com.spotai
+
 /*
 The context in which a pattern was matched.
 */

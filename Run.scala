@@ -1,3 +1,6 @@
+package com.spotai
+package main
+
 import scala.io.StdIn
 
 object Run {
@@ -71,7 +74,7 @@ object Run {
       // "wallace.aiml",
       // "xfind.aiml",
       // "update1.aiml"
-    ).map(line => "aiml\\"+line))
+    ).map(line => "aiml" + const.sep +line))
     var bye = false
 
     do{

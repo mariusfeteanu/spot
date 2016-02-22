@@ -1,3 +1,5 @@
+package com.spotai
+
 /*
 A word in a template, will be produced as itself.
 */
