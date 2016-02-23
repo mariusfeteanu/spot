@@ -12,3 +12,11 @@ project/boot/
 # http://www.alicebot.org/downloads/sets.html
 
 aiml/
+
+# Typesafe activator stuff
+.sbtserver/
+project/target/
+project/project/
+project/.sbtserver
+project/.sbtserver.lock
+project/sbt-ui.sbt

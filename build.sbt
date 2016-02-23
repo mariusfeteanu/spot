@@ -19,3 +19,6 @@ mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
     case x => MergeStrategy.first
    }
 }
+
+
+fork in run := true
