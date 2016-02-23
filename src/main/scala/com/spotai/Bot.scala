@@ -14,6 +14,9 @@ class Bot(categories:List[Category]){
   Main bot method, provides a response to a stimulus
   */
   def apply(input:String):String = {
+    /*
+    This is variable because we need to re-assign it based on the result of the match
+    */
     var patternContext = PatternContext("")
     /* We look through all the configured categories to find one that maches, we check
       - topic
