@@ -9,28 +9,29 @@ botInstance("your question here")
 */
 class Bot(categories:List[Category]){
   var lastResponse:Option[String] = None
-  var context:Option[PatternContext] = None
+  var context:BotContext = BotContext(Map.empty)
 
   /*
   Main bot method, provides a response to a stimulus
   */
   def apply(input:String):String = {
+    var patternContext = PatternContext("")
     /* We look through all the configured categories to find one that maches, we check
       - topic
       - question (stimulus, input, pattern whatever)
       - that
       */
-    categories.find({category =>
+      categories.find({category =>
       // TODO: Check that the topic matches, if topic is set
       (category.topic match {
         case None => true
-        case Some(topic:Pattern) => topic(input.split(" "), context).isDefined
+        case Some(topic:Pattern) => topic(input.split(" "), this.context, patternContext).isDefined
       }) &&
       // We check that the actual pattern matches
-      (category.stimulus(input.split(" "), context) match {
+      (category.stimulus(input.split(" "), this.context, patternContext) match {
         case None => false
-        case Some(context) => {
-          this.context = Some(context)
+        case Some(matchPatternContext) => {
+          patternContext = matchPatternContext
           true
         }
       }) &&
@@ -43,18 +44,16 @@ class Bot(categories:List[Category]){
           // But we have no last response to check against (maybe first question)
           case None => false
           // Check that the last response actually matches the <that/> filter
-          case Some(someResponse:String) => that(someResponse.split(" "), context).isDefined
+          case Some(someResponse:String) => that(someResponse.split(" "), this.context, patternContext).isDefined
         }
       })
 
     }) match {
       case Some(category:Category) =>{
         // We save the current response, and use it to match <that/> next time
-        val response = category.response(this)
+        val response = category.response(this, patternContext)
         lastResponse = Some(response)
         response
-        // + ":" + category
-        // + ":" + category.stimulus.patternElements.mkString(",") + ":" + category.response.templateElements.mkString(",")
       }
       case None => ""
     }
