@@ -1,4 +1,6 @@
 package com.spotai
+import com.spotai.state.BotContext
+import com.spotai.state.MemoryBotContext
 
 import scala.xml.{XML, Node, Elem, Text}
 
@@ -8,7 +10,7 @@ You can build from an xml specification, and the interrogate the both with the a
 botInstance("your question here")
 */
 class Bot(categories:List[Category]){
-  val context = BotContext()
+  val context = MemoryBotContext()
 
   /*
   Main bot method, provides a response to a stimulus

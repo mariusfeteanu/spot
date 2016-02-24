@@ -1,4 +1,5 @@
 package com.spotai
+import com.spotai.state.BotContext
 
 /*
 Represents a pattern that has to be matched by user input.
