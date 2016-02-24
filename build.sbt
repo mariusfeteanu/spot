@@ -5,7 +5,9 @@ lazy val root = (project in file(".")).
     scalaVersion := "2.11.7"
   )
 
-libraryDependencies += "org.scala-lang" % "scala-xml" % "2.11.0-M4"
+libraryDependencies += "org.scala-lang.modules" % "scala-xml_2.11" % "1.0.5"
+libraryDependencies += "com.typesafe.slick" % "slick_2.11" % "3.1.1"
+libraryDependencies += "com.typesafe" % "config" % "1.3.0"
 
 mainClass in Compile := Some("com.spotai.main.Run")
 
