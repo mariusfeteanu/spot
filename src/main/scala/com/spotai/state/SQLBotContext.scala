@@ -1,8 +1,9 @@
 package com.spotai
 package state
 
-import slick.driver.SQLiteDriver.api._
 import scala.concurrent.ExecutionContext.Implicits.global
+
+import slick.driver.SQLiteDriver.api._
 import slick.lifted.ProvenShape.proveShapeOf
 
 class SQLBotContext(dbConnectionString:String,
@@ -10,11 +11,13 @@ class SQLBotContext(dbConnectionString:String,
                     botInstanceId:String) extends BotContext {
 
 
-  class BotInstance(tag: Tag) extends Table[(String, String)](tag, "bot_instance") {
+  class BotLastResponse(tag: Tag) extends Table[(String, String)](tag, "bot_last_respons") {
       def id = column[String]("bot_id", O.PrimaryKey)
       def lastResponse = column[String]("last_response")
       def * = proveShapeOf(id, lastResponse)
     }
+
+  val botLastResponse = (TableQuery[BotLastResponse]).filter(_.id === botInstanceId)
 
   class Predicate(tag: Tag) extends Table[(String, String, String)](tag, "bot_predicate") {
       def id = column[String]("bot_id", O.PrimaryKey)
@@ -23,8 +26,21 @@ class SQLBotContext(dbConnectionString:String,
       def * = proveShapeOf(id, predicateName, predicateValue)
     }
 
+  val predicate = (TableQuery[Predicate]).filter(_.id === botInstanceId)
+
+  DBIO.seq((botLastResponse.schema ++ predicate.schema).create)
+
   override def lastResponse:Option[String] = {
-    Some("?")
+    val db = Database.forConfig("botSQL")
+    try {
+      val q = botLastResponse.map(_.lastResponse).take(1)
+      val action = q.result
+      val result = db.run(action)
+      val returned = action.statements.headOption
+      returned
+    } finally {
+      db.close
+    }
   }
   override def lastResponse_=(lastResponse:Option[String]) = {
   }
