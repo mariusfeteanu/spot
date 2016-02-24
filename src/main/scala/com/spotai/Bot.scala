@@ -10,7 +10,7 @@ You can build from an xml specification, and the interrogate the both with the a
 botInstance("your question here")
 */
 class Bot(categories:List[Category]){
-  val context = MemoryBotContext()
+  var context:BotContext = MemoryBotContext()
 
   /*
   Main bot method, provides a response to a stimulus
@@ -44,7 +44,7 @@ class Bot(categories:List[Category]){
         // No last response filter is set
         case None => true
         // We have some last pattern to check
-        case Some(that:Pattern) => context.lastResponse match {
+        case Some(that:Pattern) => this.context.lastResponse match {
           // But we have no last response to check against (maybe first question)
           case None => false
           // Check that the last response actually matches the <that/> filter
@@ -56,7 +56,7 @@ class Bot(categories:List[Category]){
       case Some(category:Category) =>{
         // We save the current response, and use it to match <that/> next time
         val response = category.response(this, patternContext)
-        context.lastResponse = Some(response)
+        this.context.lastResponse = Some(response)
         response
       }
       case None => ""
