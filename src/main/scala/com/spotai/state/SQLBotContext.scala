@@ -10,9 +10,7 @@ import slick.backend.DatabasePublisher
 import slick.driver.SQLiteDriver.api._
 import slick.lifted.ProvenShape.proveShapeOf
 
-class SQLBotContext(dbConnectionString:String,
-                    dbDriver:String,
-                    botInstanceId:String) extends BotContext {
+class SQLBotContext(botInstanceId:String) extends BotContext {
 
 
   class BotLastResponse(tag: Tag) extends Table[(String, String)](tag, "bot_last_response") {
@@ -32,6 +30,8 @@ class SQLBotContext(dbConnectionString:String,
 
   val predicate = (TableQuery[Predicate])
 
+  Class.forName("org.sqlite.JDBC")
+
   val db = Database.forConfig("botSQL")
   try {
     val setupAction = DBIO.seq((botLastResponse.schema ++ predicate.schema).create)
@@ -42,10 +42,8 @@ class SQLBotContext(dbConnectionString:String,
   override def lastResponse:Option[String] = {
     val db = Database.forConfig("botSQL")
     try {
-      val q = botLastResponse.filter(_.id === botInstanceId).map(_.lastResponse).take(1)
-      val action = q.result
-      val result = db.run(action)
-      val returned = action.statements.headOption
+      val result = db.run(botLastResponse.filter(_.id === botInstanceId).map(_.lastResponse).result.headOption)
+      println(">>>>>>>>"+returned)
       returned
     } finally db.close
   }
@@ -54,7 +52,7 @@ class SQLBotContext(dbConnectionString:String,
     val db = Database.forConfig("botSQL")
     try {
       lastResponse match {
-        case Some(someResponse:String) => botLastResponse.insertOrUpdate((botInstanceId, someResponse))
+        case Some(someResponse:String) => db.run(botLastResponse.insertOrUpdate((botInstanceId, someResponse)))
         case None => botLastResponse.filter(_.id === botInstanceId).delete
       }
     } finally db.close
@@ -68,9 +66,7 @@ class SQLBotContext(dbConnectionString:String,
 }
 
 object SQLBotContext{
-  def apply(dbConnectionString:String,
-            dbDriver:String,
-            botInstanceId:String):SQLBotContext = {
-    new SQLBotContext(dbConnectionString, dbDriver, botInstanceId)
+  def apply(botInstanceId:String):SQLBotContext = {
+    new SQLBotContext(botInstanceId)
   }
 }
