@@ -42,9 +42,8 @@ class SQLBotContext(botInstanceId:String) extends BotContext {
   override def lastResponse:Option[String] = {
     val db = Database.forConfig("botSQL")
     try {
-      val result = db.run(botLastResponse.filter(_.id === botInstanceId).map(_.lastResponse).result.headOption)
-      println(">>>>>>>>"+returned)
-      returned
+      val futureResult = db.run(botLastResponse.filter(_.id === botInstanceId).map(_.lastResponse).result.headOption)
+      Await.result(futureResult, 30 seconds)
     } finally db.close
   }
 
@@ -52,8 +51,8 @@ class SQLBotContext(botInstanceId:String) extends BotContext {
     val db = Database.forConfig("botSQL")
     try {
       lastResponse match {
-        case Some(someResponse:String) => db.run(botLastResponse.insertOrUpdate((botInstanceId, someResponse)))
-        case None => botLastResponse.filter(_.id === botInstanceId).delete
+        case Some(someResponse:String) => Await.ready(db.run(botLastResponse.insertOrUpdate((botInstanceId, someResponse))), 30 seconds)
+        case None => Await.ready(db.run(botLastResponse.filter(_.id === botInstanceId).delete), 30 seconds)
       }
     } finally db.close
   }

@@ -59,7 +59,10 @@ class Bot(categories:List[Category]){
         this.context.lastResponse = Some(response)
         response
       }
-      case None => ""
+      case None => {
+        this.context.lastResponse = None
+        ""
+      }
     }
   }
 }
