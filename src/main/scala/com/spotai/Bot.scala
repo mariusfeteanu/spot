@@ -10,7 +10,12 @@ You can build from an xml specification, and the interrogate the both with the a
 botInstance("your question here")
 */
 class Bot(categories:List[Category]){
-  var context:BotContext = SQLBotContext("test") //MemoryBotContext()
+  var context:BotContext = MemoryBotContext()
+
+  def this(categories:List[Category], context:BotContext){
+    this(categories)
+    this.context = context
+  }
 
   /*
   Main bot method, provides a response to a stimulus
@@ -123,6 +128,8 @@ object Bot {
   def apply(categories:List[Category]):Bot = new Bot(categories)
 
   def apply(fileName:String):Bot = apply(categoriesFromXML(XML.loadFile(fileName)))
+
+  def apply(categories:List[Category], context:BotContext):Bot = new Bot(categories, context)
 
   def fromFileNames(fileNames:List[String]):Bot = apply(fileNames.flatMap({case fileName =>
     try {

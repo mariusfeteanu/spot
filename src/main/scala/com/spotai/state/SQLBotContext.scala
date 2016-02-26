@@ -61,7 +61,12 @@ class SQLBotContext(botInstanceId:String) extends BotContext {
     Map.empty
   }
   override def predicates_=(predicates:Map[String,String]) = {
-  }
+    val db = Database.forConfig("botSQL")
+    try {
+      predicates.map({case (name, value) =>
+        Await.ready(db.run(predicate.insertOrUpdate((botInstanceId, name, value))))
+      })
+    } finally db.close
 }
 
 object SQLBotContext{

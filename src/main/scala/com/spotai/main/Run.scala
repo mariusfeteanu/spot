@@ -3,6 +3,8 @@ package main
 
 import scala.io.StdIn
 
+import com.spotai.state.SQLBotContext
+
 object Run {
   def main(args:Array[String]):Unit = {
     // https://code.google.com/archive/p/aiml-en-us-foundation-alice/wikis/AIMLFileLoadingOrder.wiki
@@ -75,6 +77,9 @@ object Run {
       // "xfind.aiml",
       // "update1.aiml"
     ).map(line => "aiml" + const.sep +line))
+
+    bot.context = SQLBotContext("test")
+
     var bye = false
 
     do{
