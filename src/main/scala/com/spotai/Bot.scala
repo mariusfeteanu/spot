@@ -89,6 +89,7 @@ object Bot {
             => wordNode.label match {
               // A <star/> node indicates that the element should be replaced by the star pattern
               case "star" => List(TemplateStar())
+              case "get"  => List(TemplateGetName((wordNode \ "@name").text))
               // Otherwise we assume it's text
               case _ => wordNode.text.split(" ").map({case templateWord:String => TemplateWord(templateWord)}).toList}
           // If the current node has children then it needs to be instantied to a complex template element
@@ -97,7 +98,7 @@ object Bot {
             => nodeElem.label match {
               // The srai is a template itself so we pass it as such now
               case "srai" => List(Srai(parseTemplate( nodeElem )))
-              case "set" => List(TemplateName((nodeElem \ "@name").text, parseTemplate( nodeElem )))
+              case "set"  => List(TemplateSetName((nodeElem \ "@name").text, parseTemplate( nodeElem )))
               // This means the element type is not implemented
               case _ => Nil
           }

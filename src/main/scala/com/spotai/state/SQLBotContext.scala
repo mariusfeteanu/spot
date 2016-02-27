@@ -33,12 +33,12 @@ class SQLBotContext(botInstanceId:String) extends BotContext {
 
   Class.forName("org.sqlite.JDBC")
 
-  val db = Database.forConfig("botSQL")
-  try {
-    val setupAction = DBIO.seq((botLastResponse.schema ++ predicate.schema).create)
-    val setupFuture: Future[Unit] = db.run(setupAction)
-    Await.result(setupFuture, 30 seconds)
-  } finally db.close
+  // val db = Database.forConfig("botSQL")
+  // try {
+  //   val setupAction = DBIO.seq((botLastResponse.schema ++ predicate.schema).create)
+  //   val setupFuture: Future[Unit] = db.run(setupAction)
+  //   Await.result(setupFuture, 30 seconds)
+  // } finally db.close
 
   override def lastResponse:Option[String] = {
     val db = Database.forConfig("botSQL")
