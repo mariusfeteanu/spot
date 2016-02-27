@@ -11,3 +11,9 @@ class Srai(templateElements:List[TemplateElement]) extends Template(templateElem
     bot(super.apply(bot, patternContext))
   }
 }
+
+object Srai {
+  def apply(templateElements:List[TemplateElement]):Srai = {
+    new Srai(templateElements)
+  }
+}

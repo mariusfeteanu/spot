@@ -20,3 +20,7 @@ project/project/
 project/.sbtserver
 project/.sbtserver.lock
 project/sbt-ui.sbt
+
+
+# debug files
+bot.db

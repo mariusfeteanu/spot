@@ -22,9 +22,10 @@ class SQLBotContext(botInstanceId:String) extends BotContext {
   val botLastResponse = (TableQuery[BotLastResponse])
 
   class Predicate(tag: Tag) extends Table[(String, String, String)](tag, "bot_predicate") {
-      def id = column[String]("bot_id", O.PrimaryKey)
+      def id = column[String]("bot_id")
       def predicateName = column[String]("name")
       def predicateValue = column[String]("value")
+      def pk = primaryKey("pk_bot_predicate", (id, predicateName))
       def * = proveShapeOf(id, predicateName, predicateValue)
     }
 
@@ -58,15 +59,20 @@ class SQLBotContext(botInstanceId:String) extends BotContext {
   }
 
   override def predicates:Map[String,String] = {
-    Map.empty
+    val db = Database.forConfig("botSQL")
+    try {
+      val futureResult = db.run(predicate.filter(_.id === botInstanceId).map(row => (row.predicateName -> row.predicateValue)).result)
+      Await.result(futureResult, 30 seconds).toMap
+    } finally db.close
   }
   override def predicates_=(predicates:Map[String,String]) = {
     val db = Database.forConfig("botSQL")
     try {
       predicates.map({case (name, value) =>
-        Await.ready(db.run(predicate.insertOrUpdate((botInstanceId, name, value))))
+        Await.ready(db.run(predicate.insertOrUpdate((botInstanceId, name, value))), 30 seconds)
       })
     } finally db.close
+  }
 }
 
 object SQLBotContext{

@@ -96,7 +96,8 @@ object Bot {
             // The name of the node indicates which type of advanced element we create
             => nodeElem.label match {
               // The srai is a template itself so we pass it as such now
-              case "srai" => List(new Srai(parseTemplate( nodeElem )))
+              case "srai" => List(Srai(parseTemplate( nodeElem )))
+              case "set" => List(TemplateName((nodeElem \ "@name").text, parseTemplate( nodeElem )))
               // This means the element type is not implemented
               case _ => Nil
           }

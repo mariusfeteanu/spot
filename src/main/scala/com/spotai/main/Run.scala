@@ -7,6 +7,7 @@ import com.spotai.state.SQLBotContext
 
 object Run {
   def main(args:Array[String]):Unit = {
+
     // https://code.google.com/archive/p/aiml-en-us-foundation-alice/wikis/AIMLFileLoadingOrder.wiki
     val bot = Bot.fromFileNames(List(
       // "reduction.names.aiml",
