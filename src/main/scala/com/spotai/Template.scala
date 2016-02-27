@@ -13,6 +13,7 @@ case class Template(templateElements:List[TemplateElement]){
     case templateSetName:TemplateSetName => templateSetName(bot, patternContext)
     case templateGetName:TemplateGetName => templateGetName(bot)
     case templateStar:TemplateStar => patternContext.star
+    case templateRandom:TemplateRandom => templateRandom(bot, patternContext)
     case _ => ???
   }).mkString(" ")
   }
