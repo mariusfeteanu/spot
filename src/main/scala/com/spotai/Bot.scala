@@ -99,8 +99,8 @@ object Bot {
               // The srai is a template itself so we pass it as such now
               case "srai"   => List(Srai(parseTemplate( nodeElem )))
               case "set"    => List(TemplateSetName((nodeElem \ "@name").text, parseTemplate( nodeElem )))
-              case "random" => List(TemplateRandom(nodeElem.nonEmptyChildren.map({
-                case il => Template(parseTemplate(il))
+              case "random" => List(TemplateRandom((nodeElem \ "li").map({
+                case li => Template(parseTemplate(li))
               }).toList))
               // This means the element type is not implemented
               case _ => Nil
