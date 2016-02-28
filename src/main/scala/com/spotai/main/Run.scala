@@ -37,13 +37,18 @@ object Run {
     val botActor = botActorSystem.actorOf(Props[BotActor], "BotActor")
 
     var bye = false
-    var botInstanceId = "test"
+    var botInstanceId = "Spot".toLowerCase
+    println(s"a:talking to $botInstanceId now")
 
     do{
       val userLine = StdIn.readLine("q:")
       userLine match {
         case null => bye = true
         case "bye" => bye = true
+        case question:String if question.startsWith("ask ") => {
+          botInstanceId = question.drop(4).toLowerCase
+          println(s"a:talking to $botInstanceId now")
+        }
         case question:String => {
           val response = Await.result(botActor?(question, botInstanceId), 5 second)
           println("a:"+response)

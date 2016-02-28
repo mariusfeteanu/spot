@@ -1,0 +1,28 @@
+<aiml version="1.0">
+
+<category><pattern>HI *</pattern><template><srai>HELLO</srai></template></category>
+<category><pattern>HI</pattern><template><srai>HELLO</srai></template></category>
+<category><pattern>HEY *</pattern><template><srai>HELLO</srai></template></category>
+<category><pattern>HEY</pattern><template><srai>HELLO</srai></template></category>
+<category><pattern>HELLO *</pattern><template><srai>HELLO</srai></template></category>
+
+<category>
+<pattern>HELLO</pattern>
+<template><random>
+<li>hi there</li>
+<li>hi</li>
+<li>hello</li>
+<li>hey</li>
+<li>hey there</li>
+</random></template>
+</category>
+
+<category><pattern>X IS *</pattern>
+<template>Okay, X is <set name="X">      <star/>     </set>.</template>
+</category>
+
+<category><pattern>WHAT IS X</pattern>
+<template>X is <get name="X"/>.</template>
+</category>
+
+</aiml>

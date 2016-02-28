@@ -22,6 +22,7 @@ import com.spotai.pattern._
 import com.spotai.template._
 
 import scala.xml.{XML, Node, Elem, Text}
+import java.io.InputStream;
 
 /*
 This class implements part of the AIML language.
@@ -152,6 +153,8 @@ object Bot {
   def apply(categories:List[Category]):Bot = new Bot(categories)
 
   def apply(fileName:String):Bot = apply(categoriesFromXML(XML.loadFile(fileName)))
+
+  def apply(inputStream:InputStream):Bot = apply(categoriesFromXML(XML.load(inputStream)))
 
   def apply(categories:List[Category], context:BotContext):Bot = new Bot(categories, context)
 

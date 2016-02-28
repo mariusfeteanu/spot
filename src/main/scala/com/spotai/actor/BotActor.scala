@@ -23,7 +23,7 @@ import akka.actor.{Actor, Props}
 import com.spotai.state.SQLBotContext
 
 class BotActor extends Actor{
-  val bot =  Bot.fromFileNames(List("test.aiml").map(line => "aiml" + const.sep +line))
+  val bot =  Bot(getClass.getResourceAsStream("/test.aiml"))
 
   def receive = {
     case (question:String, botInstanceId:String) => {
