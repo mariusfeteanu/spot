@@ -16,11 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package com.spotai
-package state
+package actor
 
-trait BotContext{
-  // The last response of the bot, before this one
-  var lastResponse:Option[String]
-  // The custom predicates of this bot
-  var predicates:Map[String,String]
+import akka.actor.{Actor, Props}
+
+import com.spotai.state.SQLBotContext
+
+
+class BotContextActor extends Actor{
 }
