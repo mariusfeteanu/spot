@@ -1,4 +1,7 @@
 package com.spotai
+package template
+
+import com.spotai.pattern.state.PatternContext
 
 /*
 A srai recursive template element, will be produced by asking the bot to evaluate it's contents

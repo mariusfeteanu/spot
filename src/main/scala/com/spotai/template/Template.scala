@@ -1,4 +1,8 @@
 package com.spotai
+package template
+
+import com.spotai.pattern.state.PatternContext
+import com.spotai.Bot
 
 /*
 A template for the bots response.

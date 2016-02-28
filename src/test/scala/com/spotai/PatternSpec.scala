@@ -1,6 +1,6 @@
 import org.scalatest.FlatSpec
 
-import com.spotai.{Pattern, WildStar, WildUnder, PatternWord}
+import com.spotai.pattern.{Pattern, WildStar, WildUnder, PatternWord}
 
 class PatternSpec extends FlatSpec{
   behavior of "An empty Pattern (from empty list)."

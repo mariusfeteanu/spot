@@ -1,4 +1,5 @@
 package com.spotai
+package pattern
 
 /*
 The * wildcar pattern element.

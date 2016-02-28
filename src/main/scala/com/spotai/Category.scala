@@ -1,5 +1,8 @@
 package com.spotai
 
+import com.spotai.pattern.Pattern
+import com.spotai.template.Template
+
 /*
 Represents an AIML category.
 */

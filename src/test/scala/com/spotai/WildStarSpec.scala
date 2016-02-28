@@ -1,6 +1,6 @@
 import org.scalatest.FlatSpec
 
-import com.spotai.WildStar
+import com.spotai.pattern.WildStar
 
 class WildStarSpec extends FlatSpec{
   behavior of "A WildStar."

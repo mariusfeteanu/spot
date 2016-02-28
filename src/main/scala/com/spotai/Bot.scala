@@ -1,6 +1,8 @@
 package com.spotai
-import com.spotai.state._
-import com.spotai.state.MemoryBotContext
+import com.spotai.state.{BotContext, MemoryBotContext}
+import com.spotai.pattern.state.PatternContext
+import com.spotai.pattern._
+import com.spotai.template._
 
 import scala.xml.{XML, Node, Elem, Text}
 

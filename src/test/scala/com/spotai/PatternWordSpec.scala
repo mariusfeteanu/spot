@@ -1,6 +1,6 @@
 import org.scalatest.FlatSpec
 
-import com.spotai.PatternWord
+import com.spotai.pattern.PatternWord
 
 class PatternWordSpec extends FlatSpec{
   behavior of "A PatternWord."

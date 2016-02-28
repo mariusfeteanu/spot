@@ -1,6 +1,6 @@
 import org.scalatest.FlatSpec
 
-import com.spotai.WildUnder
+import com.spotai.pattern.WildUnder
 
 class WildUnderSpec extends FlatSpec{
   behavior of "A WildUnder."

@@ -1,4 +1,5 @@
 package com.spotai
+package template
 
 /*
 The <set/> element of a template, will be replaced by its text value,

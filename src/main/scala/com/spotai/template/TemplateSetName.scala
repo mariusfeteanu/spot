@@ -1,5 +1,8 @@
 package com.spotai
+package template
 
+import com.spotai.pattern.state.PatternContext
+import com.spotai.Bot
 /*
 The <set/> element of a template, will be replaced by its text value,
   and that value will be solved into the current bot context.

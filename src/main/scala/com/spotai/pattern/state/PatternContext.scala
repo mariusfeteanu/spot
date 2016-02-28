@@ -1,4 +1,6 @@
 package com.spotai
+package pattern
+package state
 
 /*
 The context in which a pattern was matched.
