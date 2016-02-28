@@ -21,6 +21,7 @@ package main
 import scala.io.StdIn
 import scala.concurrent.duration._
 import scala.concurrent.Await
+import scala.language.postfixOps
 
 import akka.actor.{ActorSystem, Props, Actor}
 import akka.pattern.ask
@@ -36,6 +37,7 @@ object Run {
     val botActor = botActorSystem.actorOf(Props[BotActor], "BotActor")
 
     var bye = false
+    var botInstanceId = "test"
 
     do{
       val userLine = StdIn.readLine("q:")
@@ -43,12 +45,12 @@ object Run {
         case null => bye = true
         case "bye" => bye = true
         case question:String => {
-          val response = Await.result(botActor?question, 5 second)
+          val response = Await.result(botActor?(question, botInstanceId), 5 second)
           println("a:"+response)
         }
       }
     } while (!bye)
     println("bye")
-    botActorSystem.shutdown()
+    botActorSystem.terminate()
   }
 }

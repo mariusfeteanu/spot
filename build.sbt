@@ -14,7 +14,8 @@ libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.8.11.2"
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 libraryDependencies += "com.typesafe.akka" % "akka-actor_2.11" % "2.4.2"
 
-mainClass in Compile := Some("com.spotai.main.Run")
+mainClass in Compile  := Some("com.spotai.main.Run")
+mainClass in assembly := Some("com.spotai.main.Run")
 
 scalacOptions ++= Seq("-feature")
 scalacOptions ++= Seq("-deprecation")

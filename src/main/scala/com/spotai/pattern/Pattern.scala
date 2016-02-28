@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.spotai
 package pattern
 
-import com.spotai.state.BotContext
 import com.spotai.pattern.state.PatternContext
 
 /*
@@ -42,7 +41,7 @@ case class Pattern(patternElements:List[PatternElement]){
   - returns the match context if matched
   TODO: this nukes the context on success
   */
-  def apply(input:Seq[String], botContext:BotContext, context:PatternContext):Option[PatternContext] = {
+  def apply(input:Seq[String], context:PatternContext):Option[PatternContext] = {
     /* Look at the current input to see if it matches */
     input match {
       // We reached the end of the user input
@@ -61,20 +60,20 @@ case class Pattern(patternElements:List[PatternElement]){
           // The underscore wildcard has highes priority
           case _:WildUnder /* We try to match the wild card on the tail*/
           //TODO: This not tail recursive, but making it so is ugly, what do?
-            => Pattern(patternElements.tail)(input.tail, botContext, context) match {
+            => Pattern(patternElements.tail)(input.tail, context) match {
               /* and if it doesn't work, try the full remaining pattern again */
-              case None => Pattern(patternElements)(input.tail, botContext, context)
+              case None => Pattern(patternElements)(input.tail, context)
               /* Return the match we found */
               case found => found
             }
           // If the current word matches the current pattern we can continue
           case patternWord:PatternWord if this.cleanString(patternWord.word) == this.cleanString(input.head)
-            => Pattern(patternElements.tail)(input.tail, botContext, context)
+            => Pattern(patternElements.tail)(input.tail, context)
           // The start wildcard has lowest priority
           case _:WildStar /* We try to match the wild card on the tail*/
-            => Pattern(patternElements.tail)(input.tail, botContext, PatternContext(input.head)) match {
+            => Pattern(patternElements.tail)(input.tail, PatternContext(input.head)) match {
               /* and if it doesn't work, try the full remaining pattern again */
-              case None => Pattern(patternElements)(input.tail, botContext, PatternContext(input.head))
+              case None => Pattern(patternElements)(input.tail, PatternContext(input.head))
               /* Return the match we found */
               case found => found
             }

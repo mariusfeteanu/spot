@@ -24,10 +24,12 @@ import com.spotai.state.SQLBotContext
 
 class BotActor extends Actor{
   val bot =  Bot.fromFileNames(List("test.aiml").map(line => "aiml" + const.sep +line))
-  bot.context = SQLBotContext("test")
 
   def receive = {
-    case question:String => sender ! bot(question)
+    case (question:String, botInstanceId:String) => {
+      bot.context = SQLBotContext(botInstanceId)
+      sender ! bot(question)
+    }
     case _ => ???
   }
 

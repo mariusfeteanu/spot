@@ -53,10 +53,10 @@ class Bot(categories:List[Category]){
       // TODO: Check that the topic matches, if topic is set
       (category.topic match {
         case None => true
-        case Some(topic:Pattern) => topic(input.split(" "), this.context, patternContext).isDefined
+        case Some(topic:Pattern) => topic(input.split(" "), patternContext).isDefined
       }) &&
       // We check that the actual pattern matches
-      (category.stimulus(input.split(" "), this.context, patternContext) match {
+      (category.stimulus(input.split(" "), patternContext) match {
         case None => false
         case Some(matchPatternContext) => {
           patternContext = matchPatternContext
@@ -72,7 +72,7 @@ class Bot(categories:List[Category]){
           // But we have no last response to check against (maybe first question)
           case None => false
           // Check that the last response actually matches the <that/> filter
-          case Some(someResponse:String) => that(someResponse.split(" "), this.context, patternContext).isDefined
+          case Some(someResponse:String) => that(someResponse.split(" "), patternContext).isDefined
         }
       })
 
