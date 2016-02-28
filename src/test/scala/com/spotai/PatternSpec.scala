@@ -31,6 +31,8 @@ class PatternSpec extends FlatSpec{
     val pattern = new Pattern("")
     assert(pattern.patternElements.size == 0)
   }
+
+  behavior of "A Pattern (from string)."
   it must "parse * to a list of one WildStar element." in {
     val pattern = new Pattern("*")
     assert(pattern.patternElements.size == 1)
