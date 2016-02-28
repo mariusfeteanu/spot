@@ -21,10 +21,10 @@ import com.spotai.pattern.PatternWord
 
 class PatternWordSpec extends FlatSpec{
   behavior of "A PatternWord."
-  it must "equal if from equal String" in {
+  it must "be equal to another if created from the same String" in {
     assert(PatternWord("XYZ") == PatternWord("XYZ"))
   }
-  it must "different if from different String" in {
+  it must "be different from another if created from different String" in {
     assert(PatternWord("XYZ") != PatternWord("ZYX"))
   }
   it must "have a content equal to the string it was created from" in {
