@@ -7,7 +7,7 @@ Represents a pattern that has to be matched by user input.
 case class Pattern(patternElements:List[PatternElement]){
 
   def this(stringPattern:String) = {this(
-   stringPattern.split(" ").map({
+   stringPattern.split(" ").filter(_.size>0).map({
       case "*" => WildStar()
       case "_" => WildUnder()
       case patternWord:String => PatternWord(patternWord)}).toList

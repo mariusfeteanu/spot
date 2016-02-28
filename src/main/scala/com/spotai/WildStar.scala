@@ -3,7 +3,14 @@ package com.spotai
 /*
 The * wildcar pattern element.
 */
-class WildStar extends PatternElement
+class WildStar extends PatternElement {
+  override def equals(that:Any) = {
+    that match {
+      case _:WildStar => true
+      case _ => false
+    }
+  }
+}
 
 object WildStar {
   def apply() = {
