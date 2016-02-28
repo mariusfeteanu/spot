@@ -50,8 +50,9 @@ object Run {
           println(s"a:talking to $botInstanceId now")
         }
         case question:String => {
-          val response = Await.result(botActor?(question, botInstanceId), 5 second)
-          println("a:"+response)
+          val responseFuture = botActor?(question, botInstanceId)
+          val response = Await.result(responseFuture, 5 second)
+          println("a:"+response)s
         }
       }
     } while (!bye)
