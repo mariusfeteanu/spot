@@ -52,7 +52,7 @@ object Run {
         case question:String => {
           val responseFuture = botActor?(question, botInstanceId)
           val response = Await.result(responseFuture, 5 second)
-          println("a:"+response)s
+          println("a:"+response)
         }
       }
     } while (!bye)
