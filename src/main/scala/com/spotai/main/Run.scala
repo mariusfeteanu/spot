@@ -19,17 +19,21 @@ package com.spotai
 package main
 
 import scala.io.StdIn
+import scala.concurrent.duration._
+import scala.concurrent.Await
 
-import com.spotai.state.SQLBotContext
+import akka.actor.{ActorSystem, Props, Actor}
+import akka.pattern.ask
+import akka.util.Timeout
+
+import com.spotai.actor.BotActor
 
 object Run {
   def main(args:Array[String]):Unit = {
 
-    // https://code.google.com/archive/p/aiml-en-us-foundation-alice/wikis/AIMLFileLoadingOrder.wiki
-    val bot = Bot.fromFileNames(List("test.aiml"
-    ).map(line => "aiml" + const.sep +line))
-
-    bot.context = SQLBotContext("test")
+    implicit val timeout = Timeout(5 seconds)
+    val botActorSystem = ActorSystem("botActorSystem")
+    val botActor = botActorSystem.actorOf(Props[BotActor], "BotActor")
 
     var bye = false
 
@@ -38,9 +42,13 @@ object Run {
       userLine match {
         case null => bye = true
         case "bye" => bye = true
-        case question:String => println("a:"+bot(question))
+        case question:String => {
+          val response = Await.result(botActor?question, 5 second)
+          println("a:"+response)
+        }
       }
     } while (!bye)
     println("bye")
+    botActorSystem.shutdown()
   }
 }
