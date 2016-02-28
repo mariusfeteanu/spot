@@ -18,13 +18,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.spotai
 package template
 
+import com.spotai.state.BotContext
+
 /*
 The <set/> element of a template, will be replaced by its text value,
   and that value will be solved into the current bot context.
 */
 class TemplateGetName(name:String) extends TemplateElement{
-  def apply(bot:Bot):String = {
-    bot.context.predicates.getOrElse(name, "")
+  def apply(context:BotContext):String = {
+    context.predicates.getOrElse(name, "")
   }
 }
 

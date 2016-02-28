@@ -26,7 +26,7 @@ The <set/> element of a template, will be replaced by its text value,
 */
 class TemplateSetName(name:String, templateElements:List[TemplateElement]) extends Template(templateElements) with TemplateElement{
   override def apply(bot:Bot, patternContext:PatternContext):String = {
-    // Ask the current bots
+    // Ask the current bot to estimate the value of the predicate
     val response = super.apply(bot, patternContext)
     bot.context.predicates = (bot.context.predicates - name) + (name -> response)
     response
