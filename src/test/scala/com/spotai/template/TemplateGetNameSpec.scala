@@ -15,29 +15,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package com.spotai
-package template
+import org.scalatest.FlatSpec
 
-import com.spotai.state.BotContext
+import com.spotai.template.TemplateGetName
 
-/*
-The <set/> element of a template, will be replaced by its text value,
-  and that value will be solved into the current bot context.
-*/
-class TemplateGetName(val name:String) extends TemplateElement{
-  def apply(context:BotContext):String = {
-    context.predicates.getOrElse(name, "")
+class TemplateGetNameSpec extends FlatSpec{
+  behavior of "A TemplateGetName."
+  it must "be equal to another if created from the same String" in {
+    assert(TemplateGetName("XYZ") == TemplateGetName("XYZ"))
   }
-  override def equals(that:Any) = {
-    that match {
-      case thatTemplateGetName:TemplateGetName => thatTemplateGetName.name == this.name
-      case _ => false
-    }
+  it must "be different from another if created from different String" in {
+    assert(TemplateGetName("XYZ") != TemplateGetName("ZYX"))
   }
-}
-
-object TemplateGetName {
-  def apply(name:String):TemplateGetName = {
-    new TemplateGetName(name)
+  it must "have a content equal to the string it was created from" in {
+    assert(TemplateGetName("XYZ").name == "XYZ")
   }
 }
