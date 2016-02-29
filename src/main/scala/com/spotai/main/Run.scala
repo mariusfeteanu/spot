@@ -32,6 +32,11 @@ import com.spotai.actor.BotActor
 object Run {
   def main(args:Array[String]):Unit = {
 
+    if(args.length == 1 && args(0) == "setup"){
+      com.spotai.state.SQLBotContext.setup()
+      return
+    }
+
     implicit val timeout = Timeout(5 seconds)
     val botActorSystem = ActorSystem("botActorSystem")
     val botActor = botActorSystem.actorOf(Props[BotActor], "BotActor")
