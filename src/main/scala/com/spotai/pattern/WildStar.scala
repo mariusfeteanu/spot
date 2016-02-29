@@ -28,6 +28,7 @@ class WildStar extends PatternElement {
       case _ => false
     }
   }
+  override def hashCode = 0
 }
 
 object WildStar {

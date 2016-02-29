@@ -24,20 +24,8 @@ import com.spotai.state.BotContext
 The <set/> element of a template, will be replaced by its text value,
   and that value will be solved into the current bot context.
 */
-class TemplateGetName(val name:String) extends TemplateElement{
+case class TemplateGetName(name:String) extends TemplateElement{
   def apply(context:BotContext):String = {
     context.predicates.getOrElse(name, "")
-  }
-  override def equals(that:Any) = {
-    that match {
-      case thatTemplateGetName:TemplateGetName => thatTemplateGetName.name == this.name
-      case _ => false
-    }
-  }
-}
-
-object TemplateGetName {
-  def apply(name:String):TemplateGetName = {
-    new TemplateGetName(name)
   }
 }
