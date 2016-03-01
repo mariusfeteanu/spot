@@ -28,7 +28,7 @@ class Srai(templateElements:List[TemplateElement]) extends Template(templateElem
   override def apply(bot:Bot, patternContext:PatternContext):String = {
     // Ask the current bot, using the as the current question
     // with the srai interpreted as a a template for a question
-    bot(super.apply(bot, patternContext))
+    bot ask super.apply(bot, patternContext)
   }
 }
 

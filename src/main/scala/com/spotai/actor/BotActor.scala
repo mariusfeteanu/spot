@@ -28,7 +28,7 @@ class BotActor extends Actor{
   def receive = {
     case (question:String, botInstanceId:String) => {
       bot.context = SQLBotContext(botInstanceId)
-      sender ! bot(question)
+      sender ! (bot ask question)
     }
     case _ => ???
   }
