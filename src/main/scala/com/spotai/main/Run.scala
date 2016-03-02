@@ -22,6 +22,8 @@ import scala.io.StdIn
 import scala.concurrent.duration._
 import scala.concurrent.Await
 import scala.language.postfixOps
+import scala.util.Random
+import math.max
 
 import akka.actor.{ActorSystem, Props, Actor}
 import akka.pattern.ask
@@ -30,6 +32,17 @@ import akka.util.Timeout
 import com.spotai.actor.BotActor
 
 object Run {
+
+  def prettypln(line:String) = {
+    val rand = new Random()
+    for(c <- line){
+      print(c)
+      val delay = (max((1.0 + rand.nextGaussian()), 0.0)*50).toLong
+      Thread.sleep(delay)
+    }
+    print("\n")
+  }
+
   def main(args:Array[String]):Unit = {
 
     if(args.length == 1 && args(0) == "setup"){
@@ -43,7 +56,7 @@ object Run {
 
     var bye = false
     var botInstanceId = "Spot".toLowerCase
-    println(s"a:talking to $botInstanceId now")
+    prettypln(s"a:talking to $botInstanceId now")
 
     do{
       val userLine = StdIn.readLine("q:")
@@ -52,16 +65,16 @@ object Run {
         case "bye" => bye = true
         case question:String if question.startsWith("ask ") => {
           botInstanceId = question.drop(4).toLowerCase
-          println(s"a:talking to $botInstanceId now")
+          prettypln(s"a:talking to $botInstanceId now")
         }
         case question:String => {
           val responseFuture = botActor?(question, botInstanceId)
           val response = Await.result(responseFuture, 5 second)
-          println("a:"+response)
+          prettypln("a:"+response)
         }
       }
     } while (!bye)
-    println("bye")
+    prettypln("bye")
     botActorSystem.terminate()
   }
 }
