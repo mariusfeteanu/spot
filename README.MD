@@ -7,9 +7,8 @@ You need:
 
 Steps to test:
 
-1. Go to http://www.alicebot.org/downloads/sets.html and get some aiml files, and put those files in a folder called /aiml/
-2. ```sbt "run setup"```
-3. ```sbt run```
-4. Chat with spot
+1. ```sbt "run setup"``` (only the first time you run it on your dev machine)
+2. ```sbt run```
+3. Chat with spot
 
 License: GPL v3, see LICENSE.TXT file.
