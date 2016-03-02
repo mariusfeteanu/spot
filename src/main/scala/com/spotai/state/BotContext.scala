@@ -24,3 +24,24 @@ trait BotContext{
   // The custom predicates of this bot
   var predicates:Map[String,String]
 }
+
+//TODO: This does NOT work well with Akka, rewrite
+object BotContext{
+  var memoryBots:scala.collection.mutable.Map[String, MemoryBotContext] = scala.collection.mutable.Map.empty
+
+  def apply(botContextType:BotContextType, botInstanceId:String):BotContext = {
+    botContextType match {
+      case MemoryContext => {
+        if(memoryBots.contains(botInstanceId)){
+          memoryBots(botInstanceId)
+        }
+        else{
+          val memoryBot = MemoryBotContext()
+          memoryBots(botInstanceId) = memoryBot
+          memoryBot
+        }
+      }
+      case SQLContext => SQLBotContext(botInstanceId)
+    }
+  }
+}

@@ -30,6 +30,8 @@ import akka.pattern.ask
 import akka.util.Timeout
 
 import com.spotai.actor.BotActor
+import com.spotai.actor.BotActor.BotQuestion
+import com.spotai.state.{MemoryContext, SQLContext, BotContextType}
 
 object Run {
 
@@ -52,7 +54,7 @@ object Run {
 
     implicit val timeout = Timeout(5 seconds)
     val botActorSystem = ActorSystem("botActorSystem")
-    val botActor = botActorSystem.actorOf(Props[BotActor], "BotActor")
+    val botActor = botActorSystem.actorOf(BotActor.props(MemoryContext), "BotActor")
 
     var bye = false
     var botInstanceId = "Spot".toLowerCase
@@ -68,7 +70,7 @@ object Run {
           prettypln(s"a:talking to $botInstanceId now")
         }
         case question:String => {
-          val responseFuture = botActor?(question, botInstanceId)
+          val responseFuture = botActor?BotQuestion(question, botInstanceId)
           val response = Await.result(responseFuture, 5 second)
           prettypln("a:"+response)
         }

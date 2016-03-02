@@ -16,29 +16,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package com.spotai
-package actor
+package state
 
-import akka.actor.{Actor, Props}
+trait BotContextType {def name:String}
 
-import com.spotai.state.{BotContext, BotContextType}
-
-class BotActor(botContextType:BotContextType) extends Actor{
-  import BotActor.BotQuestion
-
-  val bot =  Bot(getClass.getResourceAsStream("/test.aiml"))
-
-  def receive = {
-    case BotQuestion(question:String, botInstanceId:String) => {
-      bot.context = BotContext(botContextType, botInstanceId)
-      sender ! (bot ask question)
-    }
-    case _ => ???
-  }
-
-}
-
-object BotActor {
-  case class BotQuestion(question:String, botInstanceId:String)
-
-  def props(botContextType:BotContextType):Props = Props(new BotActor(botContextType))
-}
+case object MemoryContext extends BotContextType {val name = "MemoryContext"}
+case object SQLContext extends BotContextType {val name = "SQLContext"}
