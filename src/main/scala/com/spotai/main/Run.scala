@@ -70,9 +70,12 @@ object Run {
           prettypln(s"a:talking to $botInstanceId now")
         }
         case question:String => {
+          val t1 = System.nanoTime()
           val responseFuture = botActor?BotQuestion(question, botInstanceId)
           val response = Await.result(responseFuture, 5 second)
-          prettypln("a:"+response)
+          val t2 = System.nanoTime()
+          val duration = (t2-t1)/1000
+          prettypln(s"a:$response [$duration mcs]")
         }
       }
     } while (!bye)
