@@ -21,18 +21,21 @@ import com.spotai.pattern.{Pattern, WildStar, WildUnder, PatternWord}
 import com.spotai.pattern.state.PatternContext
 
 class PatternSpec extends FlatSpec{
+  /* ------------------------------------------- */
   behavior of "An empty Pattern (from empty list)."
   it must "have no elements" in {
     val pattern = Pattern(Nil)
     assert(pattern.patternElements.size == 0)
   }
 
+  /* --------------------------------------------- */
   behavior of "An empty Pattern (from empty string)."
   it must "have no elements" in {
     val pattern = new Pattern("")
     assert(pattern.patternElements.size == 0)
   }
 
+  /* -------------------------------- */
   behavior of "A Pattern (from string)."
   it must "parse * to a list of one WildStar element." in {
     val pattern = new Pattern("*")
@@ -70,16 +73,39 @@ class PatternSpec extends FlatSpec{
     ))
   }
 
+  def getMatches(patternString:String, question:String) = {
+    val pattern = new Pattern(patternString)
+    var patternContext = PatternContext("")
+    pattern.matches(question.split(" "), patternContext)
+  }
 
+  /* --------------------------------------- */
+  behavior of "The pattern: '' (empty pattern)"
+  it must "not match empty string" in {
+    assert(!getMatches("", "").isDefined)
+  }
+  it must "not match an actual sentence" in {
+    assert(!getMatches("", "ABC DEF").isDefined)
+  }
+
+  /* -------------------------- */
   behavior of "The pattern: 'XYZ'"
   it must "match that exact word." in {
-    val pattern = new Pattern("XYZ")
-    var patternContext = PatternContext("")
-    assert(pattern.matches(List("XYZ"), patternContext).isDefined)
+    assert(getMatches("XYZ", "XYZ").isDefined)
   }
   it must "not match another word." in {
-    val pattern = new Pattern("XYZ")
-    var patternContext = PatternContext("")
-    assert(!pattern.matches(List("ZYX"), patternContext).isDefined)
+    assert(!getMatches("XYZ", "ABC").isDefined)
+  }
+  it must "not match a sentence ending with XYZ." in {
+    assert(!getMatches("XYZ", "ABC DEF XYZ").isDefined)
+  }
+  it must "not match a sentence begining with XYZ." in {
+    assert(!getMatches("XYZ", "XYZ ABC DEF").isDefined)
+  }
+  it must "not match a sentence containing XYZ." in {
+    assert(!getMatches("XYZ", "ABC XYZ DEF").isDefined)
+  }
+  it must "not match an empty string." in {
+    assert(!getMatches("XYZ", "").isDefined)
   }
 }
