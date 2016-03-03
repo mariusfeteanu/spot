@@ -54,7 +54,7 @@ object Run {
 
     implicit val timeout = Timeout(5 seconds)
     val botActorSystem = ActorSystem("botActorSystem")
-    val botActor = botActorSystem.actorOf(BotActor.props(SQLContext), "BotActor")
+    val botActor = botActorSystem.actorOf(BotActor.props(MemoryContext), "BotActor")
 
     var bye = false
     var botInstanceId = "Spot".toLowerCase
