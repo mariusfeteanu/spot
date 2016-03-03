@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import org.scalatest.FlatSpec
 
 import com.spotai.pattern.{Pattern, WildStar, WildUnder, PatternWord}
+import com.spotai.pattern.state.PatternContext
 
 class PatternSpec extends FlatSpec{
   behavior of "An empty Pattern (from empty list)."
@@ -67,5 +68,18 @@ class PatternSpec extends FlatSpec{
       WildUnder(),
       PatternWord("ZZ")
     ))
+  }
+
+
+  behavior of "The pattern: 'XYZ'"
+  it must "match that exact word." in {
+    val pattern = new Pattern("XYZ")
+    var patternContext = PatternContext("")
+    assert(pattern.matches(List("XYZ"), patternContext).isDefined)
+  }
+  it must "not match another word." in {
+    val pattern = new Pattern("XYZ")
+    var patternContext = PatternContext("")
+    assert(!pattern.matches(List("ZYX"), patternContext).isDefined)
   }
 }
