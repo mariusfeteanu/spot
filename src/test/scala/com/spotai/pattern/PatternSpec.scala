@@ -123,17 +123,30 @@ class PatternSpec extends FlatSpec with Matchers {
     getMatches("*", "ABC DEF GHI").get.star shouldBe "ABC DEF GHI"
   }
 
-    /* -------------------------- */
-    behavior of "The pattern: '* XYZ' (wildcar star)"
-    it must "not match an empty string." in {
-      getMatches("* XYZ", "") shouldBe empty
-    }
-    it must "match a word followed by XYZ (we assume it matches any)." in {
-      getMatches("* XYZ", "ABC XYZ") should not be empty
-      getMatches("* XYZ", "ABC XYZ").get.star shouldBe "ABC"
-    }
-    it must "match a sentence followed by XYZ (we assume it matches any)." in {
-      getMatches("* XYZ", "ABC DEF XYZ") should not be empty
-      getMatches("* XYZ", "ABC DEF XYZ").get.star shouldBe "ABC DEF"
-    }
+  /* -------------------------- */
+  behavior of "The pattern: '* XYZ' (wildcar star)"
+  it must "not match an empty string." in {
+    getMatches("* XYZ", "") shouldBe empty
+  }
+  it must "not match the single word XYZ." in {
+    getMatches("* XYZ", "XYZ") shouldBe empty
+  }
+  it must "not match some other word." in {
+    getMatches("* XYZ", "ABC") shouldBe empty
+  }
+  it must "not match a word preceded by XYZ" in {
+    getMatches("* XYZ", "XYZ ABC") shouldBe empty
+  }
+  it must "not match a sentence containing XYZ" in {
+    getMatches("* XYZ", "ABC XYZ DEF") shouldBe empty
+  }
+  it must "match a word followed by XYZ (we assume it matches any)." in {
+    getMatches("* XYZ", "ABC XYZ") should not be empty
+    getMatches("* XYZ", "ABC XYZ").get.star shouldBe "ABC"
+  }
+  it must "match a sentence followed by XYZ (we assume it matches any)." in {
+    getMatches("* XYZ", "ABC DEF XYZ") should not be empty
+    getMatches("* XYZ", "ABC DEF XYZ").get.star shouldBe "ABC DEF"
+  }
+
 }
