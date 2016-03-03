@@ -54,7 +54,7 @@ object Run {
 
     implicit val timeout = Timeout(5 seconds)
     val botActorSystem = ActorSystem("botActorSystem")
-    val botActor = botActorSystem.actorOf(BotActor.props(MemoryContext), "BotActor")
+    val botActor = botActorSystem.actorOf(BotActor.props(SQLContext), "BotActor")
 
     var bye = false
     var botInstanceId = "Spot".toLowerCase
@@ -74,7 +74,7 @@ object Run {
           val responseFuture = botActor?BotQuestion(question, botInstanceId)
           val response = Await.result(responseFuture, 5 second)
           val t2 = System.nanoTime()
-          val duration = (t2-t1)/1000
+          val duration = java.text.NumberFormat.getIntegerInstance().format((t2-t1)/1000)
           prettypln(s"a:$response [$duration mcs]")
         }
       }

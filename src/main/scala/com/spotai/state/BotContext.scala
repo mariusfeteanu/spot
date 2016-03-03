@@ -27,20 +27,9 @@ trait BotContext{
 
 //TODO: This does NOT work well with Akka, rewrite
 object BotContext{
-  var memoryBots:scala.collection.mutable.Map[String, MemoryBotContext] = scala.collection.mutable.Map.empty
-
   def apply(botContextType:BotContextType, botInstanceId:String):BotContext = {
     botContextType match {
-      case MemoryContext => {
-        if(memoryBots.contains(botInstanceId)){
-          memoryBots(botInstanceId)
-        }
-        else{
-          val memoryBot = MemoryBotContext()
-          memoryBots(botInstanceId) = memoryBot
-          memoryBot
-        }
-      }
+      case MemoryContext => MemoryBotContext()
       case SQLContext => SQLBotContext(botInstanceId)
     }
   }

@@ -27,9 +27,11 @@ class BotActor(botContextType:BotContextType) extends Actor{
 
   val bot =  Bot(getClass.getResourceAsStream("/test.aiml"))
 
+  var botContexts:scala.collection.mutable.Map[String, BotContext] = scala.collection.mutable.Map.empty
+
   def receive = {
     case BotQuestion(question:String, botInstanceId:String) => {
-      bot.context = BotContext(botContextType, botInstanceId)
+      bot.context = botContexts.getOrElseUpdate(botInstanceId, BotContext(botContextType, botInstanceId))
       sender ! (bot ask question)
     }
     case _ => ???
