@@ -116,5 +116,24 @@ class PatternSpec extends FlatSpec with Matchers {
   }
   it must "match a word (we assume it matches any)." in {
     getMatches("*", "XYZ") should not be empty
+    getMatches("*", "XYZ").get.star shouldBe "XYZ"
   }
+  it must "match a sentence (we assume it matches any)." in {
+    getMatches("*", "ABC DEF GHI") should not be empty
+    getMatches("*", "ABC DEF GHI").get.star shouldBe "ABC DEF GHI"
+  }
+
+    /* -------------------------- */
+    behavior of "The pattern: '* XYZ' (wildcar star)"
+    it must "not match an empty string." in {
+      getMatches("* XYZ", "") shouldBe empty
+    }
+    it must "match a word followed by XYZ (we assume it matches any)." in {
+      getMatches("* XYZ", "ABC XYZ") should not be empty
+      getMatches("* XYZ", "ABC XYZ").get.star shouldBe "ABC"
+    }
+    it must "match a sentence followed by XYZ (we assume it matches any)." in {
+      getMatches("* XYZ", "ABC DEF XYZ") should not be empty
+      getMatches("* XYZ", "ABC DEF XYZ").get.star shouldBe "ABC DEF"
+    }
 }
