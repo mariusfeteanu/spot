@@ -19,6 +19,7 @@ package com.spotai
 package pattern
 
 import com.spotai.pattern.state.PatternContext
+import com.spotai.Bot
 
 /*
 Represents a pattern that has to be matched by user input.
@@ -31,8 +32,6 @@ case class Pattern(patternElements:List[PatternElement]){
       case "_" => WildUnder()
       case patternWord:String => PatternWord(patternWord)}).toList
   )}
-
-  def cleanString(word:String):String = word.toUpperCase.replaceAll("[^a-zA-Z 0-9]", "").replaceAll("\\s", " ")
 
   /*
   Main pattern method
@@ -67,7 +66,7 @@ case class Pattern(patternElements:List[PatternElement]){
               case found => found
             }
           // If the current word matches the current pattern we can continue
-          case patternWord:PatternWord if this.cleanString(patternWord.word) == this.cleanString(input.head)
+          case patternWord:PatternWord if patternWord.word == input.head
             => Pattern(patternElements.tail).matches(input.tail, context)
           // The start wildcard has lowest priority
           case _:WildStar /* We try to match the wild card on the tail*/

@@ -19,12 +19,13 @@ import org.scalatest._
 
 import com.spotai.pattern.{Pattern, WildStar, WildUnder, PatternWord}
 import com.spotai.pattern.state.PatternContext
+import com.spotai.Bot
 
 class PatternSpec extends FlatSpec with Matchers {
   def getMatches(patternString:String, question:String) = {
     val pattern = new Pattern(patternString)
     var patternContext = PatternContext("")
-    pattern.matches(question.split(" "), patternContext)
+    pattern.matches(Bot.split(question), patternContext)
   }
   /* ------------------------------------------- */
   behavior of "An empty Pattern (from empty list)."
@@ -80,8 +81,8 @@ class PatternSpec extends FlatSpec with Matchers {
 
   /* --------------------------------------- */
   behavior of "The pattern: '' (empty pattern)"
-  it must "not match empty string" in {
-    getMatches("", "") shouldBe empty
+  it must "match empty string" in {
+    getMatches("", "") should not be empty
   }
   it must "not match an actual sentence" in {
     getMatches("", "ABC DEF") shouldBe empty
@@ -110,9 +111,9 @@ class PatternSpec extends FlatSpec with Matchers {
 
   /* -------------------------- */
   behavior of "The pattern: '*' (wildcar star)"
-  // it must "not match an empty string." in {
-  //   getMatches("*", "") shouldBe empty
-  // }
+  it must "not match an empty string." in {
+    getMatches("*", "") shouldBe empty
+  }
   it must "match a word (we assume it matches any)." in {
     getMatches("*", "XYZ") should not be empty
   }
