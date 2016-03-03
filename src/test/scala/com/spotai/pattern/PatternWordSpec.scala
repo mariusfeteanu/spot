@@ -15,19 +15,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import org.scalatest.FlatSpec
+import org.scalatest._
 
 import com.spotai.pattern.PatternWord
 
-class PatternWordSpec extends FlatSpec{
+class PatternWordSpec extends FlatSpec with Matchers {
   behavior of "A PatternWord."
   it must "be equal to another if created from the same String" in {
-    assert(PatternWord("XYZ") == PatternWord("XYZ"))
+    PatternWord("XYZ") shouldBe PatternWord("XYZ")
   }
   it must "be different from another if created from different String" in {
-    assert(PatternWord("XYZ") != PatternWord("ZYX"))
+    PatternWord("XYZ") should not be PatternWord("ZYX")
   }
   it must "have a content equal to the string it was created from" in {
-    assert(PatternWord("XYZ").word == "XYZ")
+    PatternWord("XYZ").word shouldBe "XYZ"
   }
 }

@@ -15,19 +15,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import org.scalatest.FlatSpec
+import org.scalatest._
 
 import com.spotai.template.TemplateWord
 
-class TemplateWordSpec extends FlatSpec{
+class TemplateWordSpec extends FlatSpec with Matchers {
   behavior of "A TemplateWord."
   it must "be equal to another if created from the same String" in {
-    assert(TemplateWord("XYZ") == TemplateWord("XYZ"))
+    TemplateWord("XYZ") shouldBe TemplateWord("XYZ")
   }
   it must "be different from another if created from different String" in {
-    assert(TemplateWord("XYZ") != TemplateWord("ZYX"))
+    TemplateWord("XYZ") should not be TemplateWord("ZYX")
   }
   it must "have a content equal to the string it was created from" in {
-    assert(TemplateWord("XYZ").word == "XYZ")
+    TemplateWord("XYZ").word shouldBe "XYZ"
   }
 }

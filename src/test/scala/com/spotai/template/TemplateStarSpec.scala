@@ -15,13 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import org.scalatest.FlatSpec
+import org.scalatest._
 
 import com.spotai.template.TemplateStar
 
-class TemplateStarSpec extends FlatSpec{
+class TemplateStarSpec extends FlatSpec with Matchers {
   behavior of "A TemplateStar."
   it must "be equal any other TemplateStar" in {
-    assert(new TemplateStar() == new TemplateStar())
+    (new TemplateStar()) shouldBe (new TemplateStar())
   }
 }

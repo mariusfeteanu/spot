@@ -15,19 +15,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import org.scalatest.FlatSpec
+import org.scalatest._
 
 import com.spotai.template.TemplateGetName
 
-class TemplateGetNameSpec extends FlatSpec{
+class TemplateGetNameSpec extends FlatSpec with Matchers {
   behavior of "A TemplateGetName."
   it must "be equal to another if created from the same String" in {
-    assert(TemplateGetName("XYZ") == TemplateGetName("XYZ"))
+    TemplateGetName("XYZ") shouldBe TemplateGetName("XYZ")
   }
   it must "be different from another if created from different String" in {
-    assert(TemplateGetName("XYZ") != TemplateGetName("ZYX"))
+    TemplateGetName("XYZ") should not be TemplateGetName("ABC")
   }
   it must "have a content equal to the string it was created from" in {
-    assert(TemplateGetName("XYZ").name == "XYZ")
+    TemplateGetName("XYZ").name shouldBe "XYZ"
   }
 }

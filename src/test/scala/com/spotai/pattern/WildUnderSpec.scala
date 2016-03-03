@@ -15,13 +15,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import org.scalatest.FlatSpec
+import org.scalatest._
 
 import com.spotai.pattern.WildUnder
 
-class WildUnderSpec extends FlatSpec{
+class WildUnderSpec extends FlatSpec with Matchers {
   behavior of "A WildUnder."
   it must "be equal any other WildUnder" in {
-    assert(new WildUnder() == new WildUnder())
+    (new WildUnder()) shouldBe (new WildUnder())
   }
 }

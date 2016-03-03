@@ -15,97 +15,105 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import org.scalatest.FlatSpec
+import org.scalatest._
 
 import com.spotai.pattern.{Pattern, WildStar, WildUnder, PatternWord}
 import com.spotai.pattern.state.PatternContext
 
-class PatternSpec extends FlatSpec{
+class PatternSpec extends FlatSpec with Matchers {
+  def getMatches(patternString:String, question:String) = {
+    val pattern = new Pattern(patternString)
+    var patternContext = PatternContext("")
+    pattern.matches(question.split(" "), patternContext)
+  }
   /* ------------------------------------------- */
   behavior of "An empty Pattern (from empty list)."
   it must "have no elements" in {
     val pattern = Pattern(Nil)
-    assert(pattern.patternElements.size == 0)
+    pattern.patternElements.size shouldBe 0
   }
 
   /* --------------------------------------------- */
   behavior of "An empty Pattern (from empty string)."
   it must "have no elements" in {
     val pattern = new Pattern("")
-    assert(pattern.patternElements.size == 0)
+    pattern.patternElements.size shouldBe 0
   }
 
   /* -------------------------------- */
   behavior of "A Pattern (from string)."
   it must "parse * to a list of one WildStar element." in {
     val pattern = new Pattern("*")
-    assert(pattern.patternElements.size == 1)
-    assert(pattern.patternElements(0) == WildStar())
+    pattern.patternElements.size shouldBe 1
+    pattern.patternElements(0) shouldBe WildStar()
   }
   it must "parse _ to a list of one WildUnder element." in {
     val pattern = new Pattern("_")
-    assert(pattern.patternElements.size == 1)
-    assert(pattern.patternElements(0) == WildUnder())
+    pattern.patternElements.size shouldBe 1
+    pattern.patternElements(0) shouldBe WildUnder()
   }
   it must "parse word XYZ to a list of one PatternWord element containing just XYZ." in {
     val pattern = new Pattern("XYZ")
-    assert(pattern.patternElements.size == 1)
-    assert(pattern.patternElements(0) == PatternWord("XYZ"))
+    pattern.patternElements.size shouldBe 1
+    pattern.patternElements(0) shouldBe PatternWord("XYZ")
   }
   it must "parse a string of words into a list of identical PatternWords." in {
     val pattern = new Pattern("XX YY ZZ")
-    assert(pattern.patternElements.size == 3)
-    assert(pattern.patternElements == List(
+    pattern.patternElements.size shouldBe 3
+    pattern.patternElements shouldBe List(
       PatternWord("XX"),
       PatternWord("YY"),
       PatternWord("ZZ")
-    ))
+    )
   }
   it must "parse a complex string into a list of identical PatternWords." in {
     val pattern = new Pattern("XX YY * _ ZZ")
-    assert(pattern.patternElements.size == 5)
-    assert(pattern.patternElements == List(
+    pattern.patternElements.size shouldBe 5
+    pattern.patternElements shouldBe List(
       PatternWord("XX"),
       PatternWord("YY"),
       WildStar(),
       WildUnder(),
       PatternWord("ZZ")
-    ))
-  }
-
-  def getMatches(patternString:String, question:String) = {
-    val pattern = new Pattern(patternString)
-    var patternContext = PatternContext("")
-    pattern.matches(question.split(" "), patternContext)
+    )
   }
 
   /* --------------------------------------- */
   behavior of "The pattern: '' (empty pattern)"
   it must "not match empty string" in {
-    assert(!getMatches("", "").isDefined)
+    getMatches("", "") shouldBe empty
   }
   it must "not match an actual sentence" in {
-    assert(!getMatches("", "ABC DEF").isDefined)
+    getMatches("", "ABC DEF") shouldBe empty
   }
 
   /* -------------------------- */
   behavior of "The pattern: 'XYZ'"
+  it must "not match an empty string." in {
+    getMatches("XYZ", "") shouldBe empty
+  }
   it must "match that exact word." in {
-    assert(getMatches("XYZ", "XYZ").isDefined)
+    getMatches("XYZ", "XYZ") should not be empty
   }
   it must "not match another word." in {
-    assert(!getMatches("XYZ", "ABC").isDefined)
+    getMatches("XYZ", "ABC") shouldBe empty
   }
   it must "not match a sentence ending with XYZ." in {
-    assert(!getMatches("XYZ", "ABC DEF XYZ").isDefined)
+    getMatches("XYZ", "ABC DEF XYZ") shouldBe empty
   }
   it must "not match a sentence begining with XYZ." in {
-    assert(!getMatches("XYZ", "XYZ ABC DEF").isDefined)
+    getMatches("XYZ", "XYZ ABC DEF") shouldBe empty
   }
   it must "not match a sentence containing XYZ." in {
-    assert(!getMatches("XYZ", "ABC XYZ DEF").isDefined)
+    getMatches("XYZ", "ABC XYZ DEF") shouldBe empty
   }
-  it must "not match an empty string." in {
-    assert(!getMatches("XYZ", "").isDefined)
+
+  /* -------------------------- */
+  behavior of "The pattern: '*' (wildcar star)"
+  // it must "not match an empty string." in {
+  //   getMatches("*", "") shouldBe empty
+  // }
+  it must "match a word (we assume it matches any)." in {
+    getMatches("*", "XYZ") should not be empty
   }
 }
