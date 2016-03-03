@@ -15,24 +15,19 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package com.spotai
-package template
+import org.scalatest.FlatSpec
 
-/*
-The <star/> element of a template, will be replaced by the words that matched * (WildStar) if any.
-*/
-class TemplateStar extends TemplateElement {
-  override def equals(that:Any) = {
-    that match {
-      case _:TemplateStar => true
-      case _ => false
-    }
+import com.spotai.template.TemplateWord
+
+class TemplateWordSpec extends FlatSpec{
+  behavior of "A TemplateWord."
+  it must "be equal to another if created from the same String" in {
+    assert(TemplateWord("XYZ") == TemplateWord("XYZ"))
   }
-  override def hashCode = 0
-}
-
-object TemplateStar {
-  def apply() = {
-    new TemplateStar()
+  it must "be different from another if created from different String" in {
+    assert(TemplateWord("XYZ") != TemplateWord("ZYX"))
+  }
+  it must "have a content equal to the string it was created from" in {
+    assert(TemplateWord("XYZ").word == "XYZ")
   }
 }
