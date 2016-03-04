@@ -78,6 +78,18 @@ class PatternSpec extends FlatSpec with Matchers {
       PatternWord("ZZ")
     )
   }
+  /* Case insensitivity */
+  it must "ignore case in a complex string when building the pattern." in {
+    val pattern = new Pattern("Xx yy * _ ZZ")
+    pattern.patternElements.size shouldBe 5
+    pattern.patternElements shouldBe List(
+      PatternWord("XX"),
+      PatternWord("YY"),
+      WildStar(),
+      WildUnder(),
+      PatternWord("ZZ")
+    )
+  }
 
   /* --------------------------------------- */
   behavior of "The pattern: '' (empty pattern)"
@@ -123,30 +135,126 @@ class PatternSpec extends FlatSpec with Matchers {
     getMatches("*", "ABC DEF GHI").get.star shouldBe "ABC DEF GHI"
   }
 
-  /* ------------------------------------------- */
-  behavior of "The pattern: '* XYZ' (wildcar star)"
+  /* ----------------------- */
+  val preStarPattern = "* XYZ"
+  behavior of s"The pattern: '$preStarPattern'"
   it must "not match an empty string." in {
-    getMatches("* XYZ", "") shouldBe empty
+    getMatches(s"$preStarPattern", "") shouldBe empty
   }
   it must "not match the single word XYZ." in {
-    getMatches("* XYZ", "XYZ") shouldBe empty
+    getMatches(s"$preStarPattern", "XYZ") shouldBe empty
   }
   it must "not match some other word." in {
-    getMatches("* XYZ", "ABC") shouldBe empty
+    getMatches(s"$preStarPattern", "ABC") shouldBe empty
   }
   it must "not match a word preceded by XYZ" in {
-    getMatches("* XYZ", "XYZ ABC") shouldBe empty
+    getMatches(s"$preStarPattern", "XYZ ABC") shouldBe empty
   }
   it must "not match a sentence containing XYZ" in {
-    getMatches("* XYZ", "ABC XYZ DEF") shouldBe empty
+    getMatches(s"$preStarPattern", "ABC XYZ DEF") shouldBe empty
   }
   it must "match a word followed by XYZ (we assume it matches any)." in {
-    getMatches("* XYZ", "ABC XYZ") should not be empty
-    getMatches("* XYZ", "ABC XYZ").get.star shouldBe "ABC"
+    getMatches(s"$preStarPattern", "ABC XYZ") should not be empty
+    getMatches(s"$preStarPattern", "ABC XYZ").get.star shouldBe "ABC"
   }
   ignore must "match a sentence followed by XYZ (we assume it matches any)." in {
-    getMatches("* XYZ", "ABC DEF XYZ") should not be empty
-    getMatches("* XYZ", "ABC DEF XYZ").get.star shouldBe "ABC DEF"
+    getMatches(s"$preStarPattern", "ABC DEF XYZ") should not be empty
+    getMatches(s"$preStarPattern", "ABC DEF XYZ").get.star shouldBe "ABC DEF"
   }
 
+  /* ----------------------- */
+  val postStarPattern = "XYZ *"
+  behavior of s"The pattern: '$postStarPattern'"
+  it must "not match an empty string." in {
+    getMatches(s"$postStarPattern", "") shouldBe empty
+  }
+  it must "not match the single word XYZ." in {
+    getMatches(s"$postStarPattern", "XYZ") shouldBe empty
+  }
+  it must "not match some other word." in {
+    getMatches(s"$postStarPattern", "ABC") shouldBe empty
+  }
+  it must "match a word preceded by XYZ" in {
+    getMatches(s"$postStarPattern", "XYZ ABC") should not be empty
+    getMatches(s"$postStarPattern", "XYZ ABC").get.star shouldBe "ABC"
+  }
+  it must "not match a sentence containing XYZ" in {
+    getMatches(s"$postStarPattern", "ABC XYZ DEF") shouldBe empty
+  }
+  it must "not match a word followed by XYZ (we assume it matches any)." in {
+    getMatches(s"$postStarPattern", "ABC XYZ") shouldBe empty
+  }
+  ignore must "match a sentence preceded by XYZ (we assume it matches any)." in {
+    getMatches(s"$postStarPattern", "XYZ ABC DEF") shouldBe empty
+  }
+
+  /* ----------------------- */
+  val containsStarPattern = "UVW * XYZ"
+  behavior of s"The pattern: '$containsStarPattern'"
+  it must "not match an empty string." in {
+    getMatches(s"$containsStarPattern", "") shouldBe empty
+  }
+  /* Words not matching */
+  it must "not match the single word XYZ." in {
+    getMatches(s"$containsStarPattern", "XYZ") shouldBe empty
+  }
+  it must "not match the single word UVW." in {
+    getMatches(s"$containsStarPattern", "UVW") shouldBe empty
+  }
+  it must "not match some other word." in {
+    getMatches(s"$containsStarPattern", "ABC") shouldBe empty
+  }
+  it must "not match a word preceded by XYZ" in {
+    getMatches(s"$containsStarPattern", "XYZ ABC") shouldBe empty
+  }
+  it must "not match a word preceded by UVW" in {
+    getMatches(s"$containsStarPattern", "UVW ABC") shouldBe empty
+  }
+  it must "not match a word followed by XYZ" in {
+    getMatches(s"$containsStarPattern", "ABC XYZ") shouldBe empty
+  }
+  it must "not match a word followed by UVW" in {
+    getMatches(s"$containsStarPattern", "ABC UVW") shouldBe empty
+  }
+
+  /* Sentence not matching */
+  it must "not match a sentence containing XYZ" in {
+    getMatches(s"$containsStarPattern", "ABC XYZ DEF") shouldBe empty
+  }
+  it must "not match a sentence containing UVW" in {
+    getMatches(s"$containsStarPattern", "ABC UVW DEF") shouldBe empty
+  }
+
+  it must "not match a sentence ending in XYZ (and not starting with UVW)" in {
+    getMatches(s"$containsStarPattern", "ABC DEF XYZ") shouldBe empty
+  }
+  it must "not match a sentence ending in UVW" in {
+    getMatches(s"$containsStarPattern", "ABC DEF UVW") shouldBe empty
+  }
+
+  it must "not match a sentence starting with XYZ" in {
+    getMatches(s"$containsStarPattern", "XYZ ABC DEF") shouldBe empty
+  }
+  it must "not match a sentence starting with UVW (and not ending in XYZ)" in {
+    getMatches(s"$containsStarPattern", "UVW ABC DEF") shouldBe empty
+  }
+  it must "not match a complex sentence with a different prefix" in {
+    getMatches(s"$containsStarPattern", "DEF UVW ABC XYZ") shouldBe empty
+  }
+  it must "not match a complex sentence with a different suffix" in {
+    getMatches(s"$containsStarPattern", "UVW ABC XYZ DEF") shouldBe empty
+  }
+  it must "not match a complex sentence with different suffix and prefix" in {
+    getMatches(s"$containsStarPattern", "GHI UVW ABC XYZ DEF") shouldBe empty
+  }
+
+  /* Word matching */
+  it must "match a simple sentence 'UVW ABC XYZ'" in {
+    getMatches(s"$containsStarPattern", "UVW ABC XYZ") should not be empty
+  }
+
+  /* Sentence matching */
+  it must "match a complex sentence 'UVW ABC DEF XYZ'" in {
+    getMatches(s"$containsStarPattern", "UVW ABC XYZ") should not be empty
+  }
 }

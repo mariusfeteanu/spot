@@ -30,7 +30,7 @@ case class Pattern(patternElements:List[PatternElement]){
    stringPattern.split(" ").filter(_.size>0).map({
       case "*" => WildStar()
       case "_" => WildUnder()
-      case patternWord:String => PatternWord(patternWord)}).toList
+      case patternWord:String => PatternWord(Bot.normalize(patternWord))}).toList
   )}
 
   /*
