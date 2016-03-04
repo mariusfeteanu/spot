@@ -33,7 +33,7 @@ class SQLBotContext(botInstanceId:String) extends BotContext {
   class BotLastResponse(tag: Tag) extends Table[(String, String)](tag, "bot_last_response") {
       def id = column[String]("bot_id", O.PrimaryKey)
       def lastResponse = column[String]("last_response")
-      def * = proveShapeOf(id, lastResponse)
+      def * = proveShapeOf((id, lastResponse))
     }
 
   val botLastResponse = (TableQuery[BotLastResponse])
@@ -43,7 +43,7 @@ class SQLBotContext(botInstanceId:String) extends BotContext {
       def predicateName = column[String]("name")
       def predicateValue = column[String]("value")
       def pk = primaryKey("pk_bot_predicate", (id, predicateName))
-      def * = proveShapeOf(id, predicateName, predicateValue)
+      def * = proveShapeOf((id, predicateName, predicateValue))
     }
 
   val predicate = (TableQuery[Predicate])

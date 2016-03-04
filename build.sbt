@@ -20,6 +20,8 @@ mainClass in Compile  := Some("com.spotai.main.RunActor")
 scalacOptions ++= Seq("-feature")
 scalacOptions ++= Seq("-deprecation")
 scalacOptions ++= Seq("-unchecked")
+scalacOptions ++= Seq("-Xlint")
+scalacOptions ++= Seq("-Xfatal-warnings")
 
 // META-INF discarding
 mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
