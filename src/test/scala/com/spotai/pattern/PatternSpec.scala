@@ -258,4 +258,7 @@ class PatternSpec extends FlatSpec with Matchers {
   it must "match a complex sentence 'UVW ABC DEF XYZ'" in {
     getMatches(s"$containsStarPattern", "UVW ABC DEF XYZ") should not be empty
   }
+  it must "match a complex sentence 'uvw abc def xyz' (lower case)" in {
+    getMatches(s"$containsStarPattern", "uvw abc def xyz") should not be empty
+  }
 }
