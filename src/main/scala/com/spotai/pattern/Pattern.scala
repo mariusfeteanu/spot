@@ -70,9 +70,9 @@ case class Pattern(patternElements:List[PatternElement]){
             => Pattern(patternElements.tail).matches(input.tail, context)
           // The start wildcard has lowest priority
           case _:WildStar /* We try to match the wild card on the tail*/
-            => Pattern(patternElements.tail).matches(input.tail, PatternContext(input.head)) match {
+            => Pattern(patternElements.tail).matches(input.tail, context.withStar(input.head)) match {
               /* and if it doesn't work, try the full remaining pattern again */
-              case None => Pattern(patternElements).matches(input.tail, PatternContext(input.head))
+              case None => Pattern(patternElements).matches(input.tail, context.withStar(input.head))
               /* Return the match we found */
               case found => found
             }

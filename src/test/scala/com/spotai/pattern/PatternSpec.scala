@@ -79,7 +79,7 @@ class PatternSpec extends FlatSpec with Matchers {
     )
   }
   /* Case insensitivity */
-  it must "ignore case in a complex string when building the pattern." in {
+  it must "be case insensitive in a complex string when building the pattern." in {
     val pattern = new Pattern("Xx yy * _ ZZ")
     pattern.patternElements.size shouldBe 5
     pattern.patternElements shouldBe List(
@@ -130,7 +130,7 @@ class PatternSpec extends FlatSpec with Matchers {
     getMatches("*", "XYZ") should not be empty
     getMatches("*", "XYZ").get.star shouldBe "XYZ"
   }
-  ignore must "match a sentence (we assume it matches any)." in {
+  it must "match a sentence (we assume it matches any)." in {
     getMatches("*", "ABC DEF GHI") should not be empty
     getMatches("*", "ABC DEF GHI").get.star shouldBe "ABC DEF GHI"
   }
@@ -157,7 +157,7 @@ class PatternSpec extends FlatSpec with Matchers {
     getMatches(s"$preStarPattern", "ABC XYZ") should not be empty
     getMatches(s"$preStarPattern", "ABC XYZ").get.star shouldBe "ABC"
   }
-  ignore must "match a sentence followed by XYZ (we assume it matches any)." in {
+  it must "match a sentence followed by XYZ (we assume it matches any)." in {
     getMatches(s"$preStarPattern", "ABC DEF XYZ") should not be empty
     getMatches(s"$preStarPattern", "ABC DEF XYZ").get.star shouldBe "ABC DEF"
   }
@@ -184,8 +184,9 @@ class PatternSpec extends FlatSpec with Matchers {
   it must "not match a word followed by XYZ (we assume it matches any)." in {
     getMatches(s"$postStarPattern", "ABC XYZ") shouldBe empty
   }
-  ignore must "match a sentence preceded by XYZ (we assume it matches any)." in {
-    getMatches(s"$postStarPattern", "XYZ ABC DEF") shouldBe empty
+  it must "match a sentence preceded by XYZ (we assume it matches any)." in {
+    getMatches(s"$postStarPattern", "XYZ ABC DEF") should not be empty
+      getMatches(s"$postStarPattern", "XYZ ABC DEF").get.star shouldBe "ABC DEF"
   }
 
   /* ----------------------- */
