@@ -24,7 +24,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import com.spotai.pattern.state.PatternContext
 import com.spotai.Bot
 
-object PatternSpec {
+object PatternBasicSpec {
   def getMatches(patternString:String, question:String) = {
     val pattern = new Pattern(patternString)
     var patternContext = PatternContext("")
@@ -33,9 +33,9 @@ object PatternSpec {
   val allWildcards = Table(("wild"), ("*"), ("_"))
 }
 
-class PatternSpec extends FlatSpec with Matchers {
-  import PatternSpec.getMatches
-  import PatternSpec.allWildcards
+class PatternBasicSpec extends FlatSpec with Matchers {
+  import PatternBasicSpec.getMatches
+  import PatternBasicSpec.allWildcards
   /* ------------------------------------------- */
   behavior of "An empty Pattern (from empty list)."
   it must "have no elements" in {

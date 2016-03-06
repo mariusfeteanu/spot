@@ -25,8 +25,8 @@ import com.spotai.pattern.state.PatternContext
 import com.spotai.Bot
 
 class PatternSuffixSpec extends FlatSpec with Matchers {
-  import PatternSpec.getMatches
-  import PatternSpec.allWildcards
+  import PatternBasicSpec.getMatches
+  import PatternBasicSpec.allWildcards
   /* ----------------------- */
   val postPatternFun = (wildcard:String) => s"XYZ $wildcard"
   behavior of s"The pattern: 'XYZ (wildcard)'"

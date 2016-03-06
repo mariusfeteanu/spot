@@ -25,8 +25,8 @@ import com.spotai.pattern.state.PatternContext
 import com.spotai.Bot
 
 class PatternContainsSpec extends FlatSpec with Matchers {
-  import PatternSpec.getMatches
-  import PatternSpec.allWildcards
+  import PatternBasicSpec.getMatches
+  import PatternBasicSpec.allWildcards
   /* ------------------------------------------------------------ */
   val containsPatternFun = (wildcard:String) => s"UVW $wildcard XYZ"
   behavior of s"The pattern: 'UVW (wildcard) XYZ'"

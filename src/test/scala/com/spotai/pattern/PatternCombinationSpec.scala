@@ -25,7 +25,7 @@ import com.spotai.pattern.state.PatternContext
 import com.spotai.Bot
 
 class PatternCombinationSpec extends FlatSpec with Matchers {
-  import PatternSpec.getMatches
+  import PatternBasicSpec.getMatches
 
   val allWildcardPairs = Table(
     ("left", "right"),
@@ -35,7 +35,7 @@ class PatternCombinationSpec extends FlatSpec with Matchers {
   val patternFun1 = (left:String, right:String) => s"$left $right"
 
   /* ----------------------- */
-  behavior of "The pattern: '(wildcard) XYZ (otherWildcard)'"
+  behavior of "The pattern: '(wildcard) (otherWildcard)'"
   it must "not match an empty string: ''" in {
     forAll(allWildcardPairs) { (left:String, right:String) =>
       getMatches(patternFun1(left, right), "") shouldBe empty
@@ -59,13 +59,12 @@ class PatternCombinationSpec extends FlatSpec with Matchers {
     }
   }
 
+  val patternFun2 = (left:String, right:String) => s"$left XYZ $right"
   /* --------------------------- */
   behavior of "The pattern: '(wildcard) XYZ (otherWildcard)'"
-  val patternFun2 = (left:String, right:String) => s"$left XYZ $right"
-
   it must "not match an empty string: ''" in {
     forAll(allWildcardPairs) { (left:String, right:String) =>
-      getMatches(patternFun2(left, right), "") shouldBe empty
+      getMatches(patternFun1(left, right), "") shouldBe empty
     }
   }
   it must "not match a single word: 'ABC'" in {
@@ -106,10 +105,9 @@ class PatternCombinationSpec extends FlatSpec with Matchers {
     }
   }
 
+  val patternFun3 = (left:String, right:String) => s"$left $right XYZ"
   /* --------------------------- */
   behavior of "The pattern: '(wildcard) (otherWildcard) XYZ '"
-  val patternFun3 = (left:String, right:String) => s"$left $right XYZ"
-
   it must "not match an empty string: ''" in {
     forAll(allWildcardPairs) { (left:String, right:String) =>
       getMatches(patternFun3(left, right), "") shouldBe empty
@@ -162,9 +160,9 @@ class PatternCombinationSpec extends FlatSpec with Matchers {
     }
   }
 
+  val patternFun4 = (left:String, right:String) => s"XYZ $left $right"
   /* --------------------------- */
   behavior of "The pattern: 'XYZ (wildcard) (otherWildcard)'"
-  val patternFun4 = (left:String, right:String) => s"XYZ $left $right"
 
   it must "not match an empty string: ''" in {
     forAll(allWildcardPairs) { (left:String, right:String) =>
