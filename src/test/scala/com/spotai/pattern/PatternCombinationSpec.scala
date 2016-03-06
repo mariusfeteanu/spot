@@ -35,7 +35,7 @@ class PatternCombinationSpec extends FlatSpec with Matchers {
   val patternFun1 = (left:String, right:String) => s"$left $right"
 
   /* ----------------------- */
-  behavior of "The pattern: '* _'"
+  behavior of "The pattern: '(wildcard) XYZ (otherWildcard)'"
   it must "not match an empty string: ''" in {
     forAll(allWildcardPairs) { (left:String, right:String) =>
       getMatches(patternFun1(left, right), "") shouldBe empty
