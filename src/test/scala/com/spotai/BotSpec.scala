@@ -20,25 +20,57 @@ package com.spotai
 import org.scalatest._
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
-import com.spotai.state.MemoryBotContext
-
 class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
+
   feature("Simple pattern matching") {
-    scenario("A brain with a single simple category"){
-      Given("a bot with single simple category")
-      val bot = Bot(getClass.getResourceAsStream("/brains/simple1.aiml"))
+    scenario("A brain with a single simple category (/bot/simple1.aiml)"){
+      Given("a bot with a single simple category")
+      val bot = Bot(getClass.getResourceAsStream("/bot/simple1.aiml"))
 
       When("it is given a simple question: 'HI'")
       val response = bot ask "HI"
-
       Then("the bot should give a simple response: 'HELLO'")
       response shouldBe "HELLO"
 
       When("it is given a simple unknown question: 'BYE'")
       val response2 = bot ask "BYE"
-
       Then("the bot should give an empty response: ''")
       response2 shouldBe ""
     }
+    scenario("A brain with two simple categories (/bot/simple2.aiml)"){
+      Given("a bot with two simple categories")
+      val bot = Bot(getClass.getResourceAsStream("/bot/simple2.aiml"))
+
+      When("it is given one simple question: 'HI'")
+      val response1 = bot ask "HI"
+      Then("the bot should give a simple response: 'HELLO'")
+      response1 shouldBe "HELLO"
+
+      When("it is given one simple question: 'HI THERE'")
+      val response2 = bot ask "HI THERE"
+      Then("the bot should give a simple response: 'HELLO THERE'")
+      response2 shouldBe "HELLO THERE"
+
+      When("it is given one simple unknown question: 'BYE'")
+      val response3 = bot ask "BYE"
+      Then("the bot should give an empty response: ''")
+      response3 shouldBe ""
+
+      When("it is given one simple unknown question: 'BYE THERE'")
+      val response4 = bot ask "BYE THERE"
+      Then("the bot should give an empty response: ''")
+      response4 shouldBe ""
+
+      When("it is given one simple unknown question: 'HI HERE'")
+      val response5 = bot ask "HI HERE"
+      Then("the bot should give an empty response: ''")
+      response5 shouldBe ""
+
+      When("it is given one simple unknown question: 'GOODBYE HERE'")
+      val response6 = bot ask "GOODBYE HERE"
+      Then("the bot should give an empty response: ''")
+      response6 shouldBe ""
+    }
   }
+
 }
