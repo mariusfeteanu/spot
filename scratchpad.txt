@@ -1,4 +1,3 @@
 test-only com.spotai.pattern.PatternCombinationSpec -- -z "not match two random words."
 
   println(patternElements.mkString(" ") + " || " + input.mkString(" "))
-  

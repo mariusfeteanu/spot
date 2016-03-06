@@ -45,31 +45,49 @@ class PatternCombinationSpec extends FlatSpec with Matchers {
   }
 
   /* --------------------------- */
-  behavior of "The pattern: '* XYZ _'"
-  val pattern2 = "* XYZ _"
+  behavior of "The pattern: '(wildcard) XYZ (otherWildcard)'"
+  val allWildcardPairs = Table(("left", "right"), ("*", "_"), ("_", "*"))
+  val patternFun1 = (left:String, right:String) => s"$left XYZ $right"
+
   it must "not match an empty string." in {
-    getMatches(s"$pattern2", "") shouldBe empty
+    forAll(allWildcardPairs) { (left:String, right:String) =>
+      getMatches(patternFun1(left, right), "") shouldBe empty
+    }
   }
   it must "not match a single word." in {
-    getMatches(s"$pattern2", "ABC") shouldBe empty
+    forAll(allWildcardPairs) { (left:String, right:String) =>
+      getMatches(patternFun1(left, right), "ABC") shouldBe empty
+    }
   }
   it must "not match two random words." in {
-    getMatches(s"$pattern2", "ABC DEF") shouldBe empty
+    forAll(allWildcardPairs) { (left:String, right:String) =>
+      getMatches(patternFun1(left, right), "ABC DEF") shouldBe empty
+    }
   }
   it must "not match the word XYZ." in {
-    getMatches(s"$pattern2", "XYZ") shouldBe empty
+    forAll(allWildcardPairs) { (left:String, right:String) =>
+      getMatches(patternFun1(left, right), "XYZ") shouldBe empty
+    }
   }
   it must "not match a sentence ending in XYZ." in {
-    getMatches(s"$pattern2", "ABC XYZ") shouldBe empty
+    forAll(allWildcardPairs) { (left:String, right:String) =>
+      getMatches(patternFun1(left, right), "ABC XYZ") shouldBe empty
+    }
   }
   it must "not match a starting with in XYZ." in {
-    getMatches(s"$pattern2", "XYZ ABC") shouldBe empty
+    forAll(allWildcardPairs) { (left:String, right:String) =>
+      getMatches(patternFun1(left, right), "XYZ ABC") shouldBe empty
+    }
   }
   it must "match a simple sentence containing XYZ." in {
-    getMatches(s"$pattern2", "ABC XYZ DEF") should not be empty
+    forAll(allWildcardPairs) { (left:String, right:String) =>
+      getMatches(patternFun1(left, right), "ABC XYZ DEF") should not be empty
+    }
   }
   it must "match a complex sentence containing XYZ." in {
-    getMatches(s"$pattern2", "ABC DEF XYZ GHI JKL") should not be empty
+    forAll(allWildcardPairs) { (left:String, right:String) =>
+      getMatches(patternFun1(left, right), "ABC DEF XYZ GHI JKL") should not be empty
+    }
   }
 
 }
