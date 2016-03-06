@@ -36,6 +36,6 @@ case class Template(templateElements:List[TemplateElement]){
     case templateStar:TemplateStar => patternContext.star
     case templateRandom:TemplateRandom => templateRandom(bot, patternContext)
     case _ => ???
-  }).mkString(" ")
+    }).mkString(" ")
   }
 }
