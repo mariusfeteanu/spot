@@ -58,10 +58,9 @@ case class Pattern(patternElements:List[PatternElement]){
         case _ => patternElements.head match {
           // The underscore wildcard has highes priority
           case _:WildUnder /* We try to match the wild card on the tail*/
-          //TODO: This not tail recursive, but making it so is ugly, what do?
-            => Pattern(patternElements.tail).matches(input.tail, context) match {
+            => Pattern(patternElements.tail).matches(input.tail, context.withStar(input.head)) match {
               /* and if it doesn't work, try the full remaining pattern again */
-              case None => Pattern(patternElements).matches(input.tail, context)
+              case None => Pattern(patternElements).matches(input.tail, context.withStar(input.head))
               /* Return the match we found */
               case found => found
             }

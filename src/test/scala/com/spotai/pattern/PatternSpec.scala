@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 import org.scalatest._
+import org.scalatest.prop.TableDrivenPropertyChecks._
 
 import com.spotai.pattern.{Pattern, WildStar, WildUnder, PatternWord}
 import com.spotai.pattern.state.PatternContext
@@ -27,6 +28,7 @@ class PatternSpec extends FlatSpec with Matchers {
     var patternContext = PatternContext("")
     pattern.matches(Bot.split(question), patternContext)
   }
+  val allWildcards = Table(("wild"), ("*"), ("_"))
   /* ------------------------------------------- */
   behavior of "An empty Pattern (from empty list)."
   it must "have no elements" in {
@@ -121,144 +123,252 @@ class PatternSpec extends FlatSpec with Matchers {
     getMatches("XYZ", "ABC XYZ DEF") shouldBe empty
   }
 
-  /* --------------------------------------- */
-  behavior of "The pattern: '*' (wildcar star)"
+  /* ------------------------------- */
+  behavior of "The pattern: (wildcard)"
   it must "not match an empty string." in {
-    getMatches("*", "") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      getMatches(s"$wildcard", "") shouldBe empty
+    }
   }
   it must "match a word (we assume it matches any)." in {
-    getMatches("*", "XYZ") should not be empty
-    getMatches("*", "XYZ").get.star shouldBe "XYZ"
+    forAll(allWildcards) { (wildcard:String) =>
+      getMatches(s"$wildcard", "XYZ") should not be empty
+      getMatches(s"$wildcard", "XYZ").get.star shouldBe "XYZ"
+    }
   }
   it must "match a sentence (we assume it matches any)." in {
-    getMatches("*", "ABC DEF GHI") should not be empty
-    getMatches("*", "ABC DEF GHI").get.star shouldBe "ABC DEF GHI"
+    forAll(allWildcards) { (wildcard:String) =>
+      getMatches(s"$wildcard", "ABC DEF GHI") should not be empty
+      getMatches(s"$wildcard", "ABC DEF GHI").get.star shouldBe "ABC DEF GHI"
+    }
   }
 
-  /* ----------------------- */
-  val preStarPattern = "* XYZ"
-  behavior of s"The pattern: '$preStarPattern'"
+  /* -------------------------------------------------- */
+  val prePatternFun = (wildcard:String) => s"$wildcard XYZ"
+  behavior of s"The pattern: '(wildcard) XYZ'"
   it must "not match an empty string." in {
-    getMatches(s"$preStarPattern", "") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val prePattern = prePatternFun(wildcard)
+      getMatches(s"$prePattern", "") shouldBe empty
+    }
   }
   it must "not match the single word XYZ." in {
-    getMatches(s"$preStarPattern", "XYZ") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val prePattern = prePatternFun(wildcard)
+      getMatches(s"$prePattern", "XYZ") shouldBe empty
+    }
   }
   it must "not match some other word." in {
-    getMatches(s"$preStarPattern", "ABC") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val prePattern = prePatternFun(wildcard)
+      getMatches(s"$prePattern", "ABC") shouldBe empty
+    }
   }
   it must "not match a word preceded by XYZ" in {
-    getMatches(s"$preStarPattern", "XYZ ABC") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val prePattern = prePatternFun(wildcard)
+      getMatches(s"$prePattern", "XYZ ABC") shouldBe empty
+    }
   }
   it must "not match a sentence containing XYZ" in {
-    getMatches(s"$preStarPattern", "ABC XYZ DEF") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val prePattern = prePatternFun(wildcard)
+      getMatches(s"$prePattern", "ABC XYZ DEF") shouldBe empty
+    }
   }
   it must "match a word followed by XYZ (we assume it matches any)." in {
-    getMatches(s"$preStarPattern", "ABC XYZ") should not be empty
-    getMatches(s"$preStarPattern", "ABC XYZ").get.star shouldBe "ABC"
+    forAll(allWildcards) { (wildcard:String) =>
+      val prePattern = prePatternFun(wildcard)
+      getMatches(s"$prePattern", "ABC XYZ") should not be empty
+      getMatches(s"$prePattern", "ABC XYZ").get.star shouldBe "ABC"
+    }
   }
   it must "match a sentence followed by XYZ (we assume it matches any)." in {
-    getMatches(s"$preStarPattern", "ABC DEF XYZ") should not be empty
-    getMatches(s"$preStarPattern", "ABC DEF XYZ").get.star shouldBe "ABC DEF"
+    forAll(allWildcards) { (wildcard:String) =>
+      val prePattern = prePatternFun(wildcard)
+      getMatches(s"$prePattern", "ABC DEF XYZ") should not be empty
+      getMatches(s"$prePattern", "ABC DEF XYZ").get.star shouldBe "ABC DEF"
+    }
   }
 
   /* ----------------------- */
-  val postStarPattern = "XYZ *"
-  behavior of s"The pattern: '$postStarPattern'"
+  val postPatternFun = (wildcard:String) => s"XYZ $wildcard"
+  behavior of s"The pattern: 'XYZ (wildcard)'"
   it must "not match an empty string." in {
-    getMatches(s"$postStarPattern", "") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val postPattern = postPatternFun(wildcard)
+      getMatches(s"$postPattern", "") shouldBe empty
+    }
   }
   it must "not match the single word XYZ." in {
-    getMatches(s"$postStarPattern", "XYZ") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val postPattern = postPatternFun(wildcard)
+      getMatches(s"$postPattern", "XYZ") shouldBe empty
+    }
   }
   it must "not match some other word." in {
-    getMatches(s"$postStarPattern", "ABC") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val postPattern = postPatternFun(wildcard)
+      getMatches(s"$postPattern", "ABC") shouldBe empty
+    }
   }
   it must "match a word preceded by XYZ" in {
-    getMatches(s"$postStarPattern", "XYZ ABC") should not be empty
-    getMatches(s"$postStarPattern", "XYZ ABC").get.star shouldBe "ABC"
+    forAll(allWildcards) { (wildcard:String) =>
+      val postPattern = postPatternFun(wildcard)
+      getMatches(s"$postPattern", "XYZ ABC") should not be empty
+      getMatches(s"$postPattern", "XYZ ABC").get.star shouldBe "ABC"
+    }
   }
   it must "not match a sentence containing XYZ" in {
-    getMatches(s"$postStarPattern", "ABC XYZ DEF") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val postPattern = postPatternFun(wildcard)
+      getMatches(s"$postPattern", "ABC XYZ DEF") shouldBe empty
+    }
   }
   it must "not match a word followed by XYZ (we assume it matches any)." in {
-    getMatches(s"$postStarPattern", "ABC XYZ") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val postPattern = postPatternFun(wildcard)
+      getMatches(s"$postPattern", "ABC XYZ") shouldBe empty
+    }
   }
   it must "match a sentence preceded by XYZ (we assume it matches any)." in {
-    getMatches(s"$postStarPattern", "XYZ ABC DEF") should not be empty
-      getMatches(s"$postStarPattern", "XYZ ABC DEF").get.star shouldBe "ABC DEF"
+    forAll(allWildcards) { (wildcard:String) =>
+      val postPattern = postPatternFun(wildcard)
+      getMatches(s"$postPattern", "XYZ ABC DEF") should not be empty
+      getMatches(s"$postPattern", "XYZ ABC DEF").get.star shouldBe "ABC DEF"
+    }
   }
 
-  /* ----------------------- */
-  val containsStarPattern = "UVW * XYZ"
-  behavior of s"The pattern: '$containsStarPattern'"
+  /* --------------------------------------------------0--------- */
+  val containsPatternFun = (wildcard:String) => s"UVW $wildcard XYZ"
+  behavior of s"The pattern: 'UVW (wildcard) XYZ'"
   it must "not match an empty string." in {
-    getMatches(s"$containsStarPattern", "") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "") shouldBe empty
+    }
   }
   /* Words not matching */
   it must "not match the single word XYZ." in {
-    getMatches(s"$containsStarPattern", "XYZ") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "XYZ") shouldBe empty
+    }
   }
   it must "not match the single word UVW." in {
-    getMatches(s"$containsStarPattern", "UVW") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "UVW") shouldBe empty
+    }
   }
   it must "not match some other word." in {
-    getMatches(s"$containsStarPattern", "ABC") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "ABC") shouldBe empty
+    }
   }
   it must "not match a word preceded by XYZ" in {
-    getMatches(s"$containsStarPattern", "XYZ ABC") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "XYZ ABC") shouldBe empty
+    }
   }
   it must "not match a word preceded by UVW" in {
-    getMatches(s"$containsStarPattern", "UVW ABC") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "UVW ABC") shouldBe empty
+    }
   }
   it must "not match a word followed by XYZ" in {
-    getMatches(s"$containsStarPattern", "ABC XYZ") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "ABC XYZ") shouldBe empty
+    }
   }
   it must "not match a word followed by UVW" in {
-    getMatches(s"$containsStarPattern", "ABC UVW") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "ABC UVW") shouldBe empty
+    }
   }
 
   /* Sentence not matching */
   it must "not match a sentence containing XYZ" in {
-    getMatches(s"$containsStarPattern", "ABC XYZ DEF") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "ABC XYZ DEF") shouldBe empty
+    }
   }
   it must "not match a sentence containing UVW" in {
-    getMatches(s"$containsStarPattern", "ABC UVW DEF") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "ABC UVW DEF") shouldBe empty
+    }
   }
 
   it must "not match a sentence ending in XYZ (and not starting with UVW)" in {
-    getMatches(s"$containsStarPattern", "ABC DEF XYZ") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "ABC DEF XYZ") shouldBe empty
+    }
   }
   it must "not match a sentence ending in UVW" in {
-    getMatches(s"$containsStarPattern", "ABC DEF UVW") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "ABC DEF UVW") shouldBe empty
+    }
   }
 
   it must "not match a sentence starting with XYZ" in {
-    getMatches(s"$containsStarPattern", "XYZ ABC DEF") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "XYZ ABC DEF") shouldBe empty
+    }
   }
   it must "not match a sentence starting with UVW (and not ending in XYZ)" in {
-    getMatches(s"$containsStarPattern", "UVW ABC DEF") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "UVW ABC DEF") shouldBe empty
+    }
   }
   it must "not match a complex sentence with a different prefix" in {
-    getMatches(s"$containsStarPattern", "DEF UVW ABC XYZ") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "DEF UVW ABC XYZ") shouldBe empty
+    }
   }
   it must "not match a complex sentence with a different suffix" in {
-    getMatches(s"$containsStarPattern", "UVW ABC XYZ DEF") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "UVW ABC XYZ DEF") shouldBe empty
+    }
   }
   it must "not match a complex sentence with different suffix and prefix" in {
-    getMatches(s"$containsStarPattern", "GHI UVW ABC XYZ DEF") shouldBe empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "GHI UVW ABC XYZ DEF") shouldBe empty
+    }
   }
 
   /* Word matching */
   it must "match a simple sentence 'UVW ABC XYZ'" in {
-    getMatches(s"$containsStarPattern", "UVW ABC XYZ") should not be empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "UVW ABC XYZ") should not be empty
+    }
   }
 
   /* Sentence matching */
   it must "match a complex sentence 'UVW ABC DEF XYZ'" in {
-    getMatches(s"$containsStarPattern", "UVW ABC DEF XYZ") should not be empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "UVW ABC DEF XYZ") should not be empty
+    }
   }
   it must "match a complex sentence 'uvw abc def xyz' (lower case)" in {
-    getMatches(s"$containsStarPattern", "uvw abc def xyz") should not be empty
+    forAll(allWildcards) { (wildcard:String) =>
+      val containsPattern = containsPatternFun(wildcard)
+      getMatches(s"$containsPattern", "uvw abc def xyz") should not be empty
+    }
   }
 }
