@@ -30,50 +30,50 @@ class PatternContainsSpec extends FlatSpec with Matchers {
   /* ------------------------------------------------------------ */
   val containsPatternFun = (wildcard:String) => s"UVW $wildcard XYZ"
   behavior of s"The pattern: 'UVW (wildcard) XYZ'"
-  it must "not match an empty string." in {
+  it must "not match an empty string: ''" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "") shouldBe empty
     }
   }
   /* Words not matching */
-  it must "not match the single word XYZ." in {
+  it must "not match the single word: 'XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "XYZ") shouldBe empty
     }
   }
-  it must "not match the single word UVW." in {
+  it must "not match the single word: 'UVW'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "UVW") shouldBe empty
     }
   }
-  it must "not match some other word." in {
+  it must "not match some other word: 'ABC'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "ABC") shouldBe empty
     }
   }
-  it must "not match a word preceded by XYZ" in {
+  it must "not match a word preceded by XYZ: 'XYZ ABC'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "XYZ ABC") shouldBe empty
     }
   }
-  it must "not match a word preceded by UVW" in {
+  it must "not match a word preceded by UVW: 'UVW ABC'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "UVW ABC") shouldBe empty
     }
   }
-  it must "not match a word followed by XYZ" in {
+  it must "not match a word followed by XYZ: 'ABC XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "ABC XYZ") shouldBe empty
     }
   }
-  it must "not match a word followed by UVW" in {
+  it must "not match a word followed by UVW: 'ABC UVW'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "ABC UVW") shouldBe empty
@@ -81,57 +81,57 @@ class PatternContainsSpec extends FlatSpec with Matchers {
   }
 
   /* Sentence not matching */
-  it must "not match a sentence containing XYZ" in {
+  it must "not match a sentence containing XYZ: 'ABC XYZ DEF'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "ABC XYZ DEF") shouldBe empty
     }
   }
-  it must "not match a sentence containing UVW" in {
+  it must "not match a sentence containing UVW: 'ABC UVW DEF'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "ABC UVW DEF") shouldBe empty
     }
   }
 
-  it must "not match a sentence ending in XYZ (and not starting with UVW)" in {
+  it must "not match a sentence ending in XYZ (and not starting with UVW): 'ABC DEF XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "ABC DEF XYZ") shouldBe empty
     }
   }
-  it must "not match a sentence ending in UVW" in {
+  it must "not match a sentence ending in UVW: 'ABC DEF UVW'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "ABC DEF UVW") shouldBe empty
     }
   }
 
-  it must "not match a sentence starting with XYZ" in {
+  it must "not match a sentence starting with XYZ: 'XYZ ABC DEF'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "XYZ ABC DEF") shouldBe empty
     }
   }
-  it must "not match a sentence starting with UVW (and not ending in XYZ)" in {
+  it must "not match a sentence starting with UVW (and not ending in XYZ): 'UVW ABC DEF'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "UVW ABC DEF") shouldBe empty
     }
   }
-  it must "not match a complex sentence with a different prefix" in {
+  it must "not match a complex sentence with a different prefix: 'DEF UVW ABC XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "DEF UVW ABC XYZ") shouldBe empty
     }
   }
-  it must "not match a complex sentence with a different suffix" in {
+  it must "not match a complex sentence with a different suffix: 'UVW ABC XYZ DEF'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "UVW ABC XYZ DEF") shouldBe empty
     }
   }
-  it must "not match a complex sentence with different suffix and prefix" in {
+  it must "not match a complex sentence with different suffix and prefix: 'GHI UVW ABC XYZ DEF'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "GHI UVW ABC XYZ DEF") shouldBe empty
@@ -139,7 +139,7 @@ class PatternContainsSpec extends FlatSpec with Matchers {
   }
 
   /* Word matching */
-  it must "match a simple sentence 'UVW ABC XYZ'" in {
+  it must "match a simple sentence: 'UVW ABC XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "UVW ABC XYZ") should not be empty
@@ -147,13 +147,13 @@ class PatternContainsSpec extends FlatSpec with Matchers {
   }
 
   /* Sentence matching */
-  it must "match a complex sentence 'UVW ABC DEF XYZ'" in {
+  it must "match a complex sentence: 'UVW ABC DEF XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "UVW ABC DEF XYZ") should not be empty
     }
   }
-  it must "match a complex sentence 'uvw abc def xyz' (lower case)" in {
+  it must "match a complex sentence (lower case): 'uvw abc def xyz'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val containsPattern = containsPatternFun(wildcard)
       getMatches(s"$containsPattern", "uvw abc def xyz") should not be empty

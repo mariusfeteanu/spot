@@ -30,44 +30,44 @@ class PatternSuffixSpec extends FlatSpec with Matchers {
   /* ----------------------- */
   val postPatternFun = (wildcard:String) => s"XYZ $wildcard"
   behavior of s"The pattern: 'XYZ (wildcard)'"
-  it must "not match an empty string." in {
+  it must "not match an empty string: ''" in {
     forAll(allWildcards) { (wildcard:String) =>
       val postPattern = postPatternFun(wildcard)
       getMatches(s"$postPattern", "") shouldBe empty
     }
   }
-  it must "not match the single word XYZ." in {
+  it must "not match the single word: 'XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val postPattern = postPatternFun(wildcard)
       getMatches(s"$postPattern", "XYZ") shouldBe empty
     }
   }
-  it must "not match some other word." in {
+  it must "not match some other word: 'ABC'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val postPattern = postPatternFun(wildcard)
       getMatches(s"$postPattern", "ABC") shouldBe empty
     }
   }
-  it must "match a word preceded by XYZ" in {
+  it must "match a word preceded by XYZ: 'XYZ ABC'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val postPattern = postPatternFun(wildcard)
       getMatches(s"$postPattern", "XYZ ABC") should not be empty
       getMatches(s"$postPattern", "XYZ ABC").get.star shouldBe "ABC"
     }
   }
-  it must "not match a sentence containing XYZ" in {
+  it must "not match a sentence containing XYZ: 'ABC XYZ DEF'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val postPattern = postPatternFun(wildcard)
       getMatches(s"$postPattern", "ABC XYZ DEF") shouldBe empty
     }
   }
-  it must "not match a word followed by XYZ (we assume it matches any)." in {
+  it must "not match a word followed by XYZ (we assume it matches any): 'ABC XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val postPattern = postPatternFun(wildcard)
       getMatches(s"$postPattern", "ABC XYZ") shouldBe empty
     }
   }
-  it must "match a sentence preceded by XYZ (we assume it matches any)." in {
+  it must "match a sentence preceded by XYZ (we assume it matches any): 'XYZ ABC DEF'" in {
     forAll(allWildcards) { (wildcard:String) =>
       val postPattern = postPatternFun(wildcard)
       getMatches(s"$postPattern", "XYZ ABC DEF") should not be empty

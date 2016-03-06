@@ -102,48 +102,48 @@ class PatternSpec extends FlatSpec with Matchers {
 
   /* --------------------------------------- */
   behavior of "The pattern: '' (empty pattern)"
-  it must "match empty string" in {
+  it must "match empty string: ''" in {
     getMatches("", "") should not be empty
   }
-  it must "not match an actual sentence" in {
+  it must "not match an actual sentence: 'ABC DEF'" in {
     getMatches("", "ABC DEF") shouldBe empty
   }
 
   /* -------------------------- */
   behavior of "The pattern: 'XYZ'"
-  it must "not match an empty string." in {
+  it must "not match an empty string: ''" in {
     getMatches("XYZ", "") shouldBe empty
   }
-  it must "match that exact word." in {
+  it must "match that exact word: 'XYZ'" in {
     getMatches("XYZ", "XYZ") should not be empty
   }
-  it must "not match another word." in {
+  it must "not match another word: 'ABC'" in {
     getMatches("XYZ", "ABC") shouldBe empty
   }
-  it must "not match a sentence ending with XYZ." in {
+  it must "not match a sentence ending with XYZ: 'ABC DEF XYZ'" in {
     getMatches("XYZ", "ABC DEF XYZ") shouldBe empty
   }
-  it must "not match a sentence begining with XYZ." in {
+  it must "not match a sentence begining with XYZ: 'XYZ ABC DEF'" in {
     getMatches("XYZ", "XYZ ABC DEF") shouldBe empty
   }
-  it must "not match a sentence containing XYZ." in {
+  it must "not match a sentence containing XYZ: 'ABC XYZ DEF'" in {
     getMatches("XYZ", "ABC XYZ DEF") shouldBe empty
   }
 
   /* ------------------------------- */
   behavior of "The pattern: (wildcard)"
-  it must "not match an empty string." in {
+  it must "not match an empty string: ''" in {
     forAll(allWildcards) { (wildcard:String) =>
       getMatches(s"$wildcard", "") shouldBe empty
     }
   }
-  it must "match a word (we assume it matches any)." in {
+  it must "match a word (we assume it matches any): 'XYZ'" in {
     forAll(allWildcards) { (wildcard:String) =>
       getMatches(s"$wildcard", "XYZ") should not be empty
       getMatches(s"$wildcard", "XYZ").get.star shouldBe "XYZ"
     }
   }
-  it must "match a sentence (we assume it matches any)." in {
+  it must "match a sentence (we assume it matches any): 'ABC DEF GHI'" in {
     forAll(allWildcards) { (wildcard:String) =>
       getMatches(s"$wildcard", "ABC DEF GHI") should not be empty
       getMatches(s"$wildcard", "ABC DEF GHI").get.star shouldBe "ABC DEF GHI"
