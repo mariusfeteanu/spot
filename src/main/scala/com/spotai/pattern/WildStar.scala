@@ -29,6 +29,8 @@ class WildStar extends PatternElement {
     }
   }
   override def hashCode = 0
+
+  override def toString() = "*"
 }
 
 object WildStar {

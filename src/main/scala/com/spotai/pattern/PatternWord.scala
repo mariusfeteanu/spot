@@ -21,4 +21,6 @@ package pattern
 /*
 An actual word that has to be matched as is.
 */
-case class PatternWord(word:String) extends PatternElement
+case class PatternWord(word:String) extends PatternElement {
+  override def toString() = word
+}

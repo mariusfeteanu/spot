@@ -30,6 +30,7 @@ class WildUnder extends PatternElement {
     }
   }
   override def hashCode = 0
+  override def toString() = "_"
 }
 
 object WildUnder {

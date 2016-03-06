@@ -24,10 +24,10 @@ import org.scalatest.prop.TableDrivenPropertyChecks._
 import com.spotai.pattern.state.PatternContext
 import com.spotai.Bot
 
-class PatternPrecedenceSpec extends FlatSpec with Matchers {
+class PatternCombinationSpec extends FlatSpec with Matchers {
   import PatternSpec.getMatches
   /* ----------------------- */
-  behavior of s"The pattern: '* _'"
+  behavior of "The pattern: '* _'"
   val pattern1 = "* _"
   it must "not match an empty string." in {
     getMatches(s"$pattern1", "") shouldBe empty
@@ -38,13 +38,15 @@ class PatternPrecedenceSpec extends FlatSpec with Matchers {
   it must "match two random words." in {
     getMatches(s"$pattern1", "UVW XYZ") should not be empty
     getMatches(s"$pattern1", "UVW XYZ").get.star shouldBe "UVW XYZ"
-    getMatches(s"$pattern1", "XYZ UVW") should not be empty
-    getMatches(s"$pattern1", "XYZ UVW").get.star shouldBe "XYZ UVW"
+  }
+  it must "match many random words." in {
+    getMatches(s"$pattern1", "UVW XYZ ABC DEF") should not be empty
+    getMatches(s"$pattern1", "UVW XYZ ABC DEF").get.star shouldBe "UVW XYZ ABC DEF"
   }
 
   /* --------------------------- */
-  behavior of s"The pattern: '* XYZ _'"
-  val pattern2 = "* _"
+  behavior of "The pattern: '* XYZ _'"
+  val pattern2 = "* XYZ _"
   it must "not match an empty string." in {
     getMatches(s"$pattern2", "") shouldBe empty
   }
