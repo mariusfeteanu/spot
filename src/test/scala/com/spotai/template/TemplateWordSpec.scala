@@ -15,9 +15,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-import org.scalatest._
+package com.spotai
+package template
 
-import com.spotai.template.TemplateWord
+import org.scalatest._
 
 class TemplateWordSpec extends FlatSpec with Matchers {
   behavior of "A TemplateWord."
