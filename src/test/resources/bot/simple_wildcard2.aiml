@@ -1,0 +1,24 @@
+<aiml version="1.0">
+
+<category>
+  <pattern>HI THERE</pattern>
+  <template>THIS IS THE FIRST RESPONSE.</template>
+</category>
+<category>
+  <pattern>HI _</pattern>
+  <template>THIS IS THE SECOND RESPONSE.</template>
+</category>
+<category>
+  <pattern>_ HI</pattern>
+  <template>THIS IS THE THIRD RESPONSE.</template>
+</category>
+<category>
+  <pattern>_</pattern>
+  <template>THIS IS THE FOURTH RESPONSE.</template>
+</category>
+<category>
+  <pattern>BYE THERE</pattern>
+  <template>THIS IS THE NEVER RESPONSE.</template>
+</category>
+
+</aiml>

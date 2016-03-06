@@ -73,4 +73,66 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
     }
   }
 
+  feature("Simple wild card pattern matching") {
+    scenario("A brain with a few simple wildcard (*) patterns (/bot/simple_wildcard1.aiml)"){
+      Given("a bot with a few wildcard patterns (*)")
+      val bot = Bot(getClass.getResourceAsStream("/bot/simple_wildcard1.aiml"))
+
+      When("it is given a specific question: 'HI THERE'")
+      val response1 = bot ask "HI THERE"
+      Then("the bot should give the specific response: 'THIS IS THE FIRST RESPONSE.'")
+      response1 shouldBe "THIS IS THE FIRST RESPONSE."
+
+      When("it is given another question: 'HI AGAIN THERE'")
+      val response2 = bot ask "HI AGAIN THERE"
+      Then("the bot should give the response: 'THIS IS THE SECOND RESPONSE.'")
+      response2 shouldBe "THIS IS THE SECOND RESPONSE."
+
+      When("it is given another question: 'THIS IS A HI'")
+      val response3 = bot ask "THIS IS A HI"
+      Then("the bot should give the response: 'THIS IS THE THIRD RESPONSE.'")
+      response3 shouldBe "THIS IS THE THIRD RESPONSE."
+
+      When("it is given any question: 'ijofshuge;o dbjdsaoih dasbdai'")
+      val response4 = bot ask "ijofshuge;o dbjdsaoih dasbdai"
+      Then("the bot should give the default response: 'THIS IS THE FOURTH RESPONSE.'")
+      response4 shouldBe "THIS IS THE FOURTH RESPONSE."
+
+      When("it is given a question that matches after *: 'BYE THERE'")
+      val response5 = bot ask "BYE THERE"
+      Then("the bot should give the default response: 'THIS IS THE FOURTH RESPONSE.'")
+      response5 shouldBe "THIS IS THE FOURTH RESPONSE."
+    }
+
+    scenario("A brain with a few simple wildcard (_) patterns (/bot/simple_wildcard2.aiml)"){
+      Given("a bot with a few wildcard patterns (_)")
+      val bot = Bot(getClass.getResourceAsStream("/bot/simple_wildcard2.aiml"))
+
+      When("it is given a specific question: 'HI THERE'")
+      val response1 = bot ask "HI THERE"
+      Then("the bot should give the specific response: 'THIS IS THE FIRST RESPONSE.'")
+      response1 shouldBe "THIS IS THE FIRST RESPONSE."
+
+      When("it is given another question: 'HI AGAIN THERE'")
+      val response2 = bot ask "HI AGAIN THERE"
+      Then("the bot should give the response: 'THIS IS THE SECOND RESPONSE.'")
+      response2 shouldBe "THIS IS THE SECOND RESPONSE."
+
+      When("it is given another question: 'THIS IS A HI'")
+      val response3 = bot ask "THIS IS A HI"
+      Then("the bot should give the response: 'THIS IS THE THIRD RESPONSE.'")
+      response3 shouldBe "THIS IS THE THIRD RESPONSE."
+
+      When("it is given any question: 'ijofshuge;o dbjdsaoih dasbdai'")
+      val response4 = bot ask "ijofshuge;o dbjdsaoih dasbdai"
+      Then("the bot should give the default response: 'THIS IS THE FOURTH RESPONSE.'")
+      response4 shouldBe "THIS IS THE FOURTH RESPONSE."
+
+      When("it is given a question that matches after *: 'BYE THERE'")
+      val response5 = bot ask "BYE THERE"
+      Then("the bot should give the default response: 'THIS IS THE FOURTH RESPONSE.'")
+      response5 shouldBe "THIS IS THE FOURTH RESPONSE."
+    }
+  }
+
 }
