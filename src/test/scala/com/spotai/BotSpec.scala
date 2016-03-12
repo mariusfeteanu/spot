@@ -73,7 +73,7 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
     }
   }
 
-  feature("Simple wild card pattern matching") {
+  feature("Wild card pattern matching") {
     scenario("A brain with a few simple wildcard (*) patterns (/bot/simple_wildcard1.aiml)"){
       Given("a bot with a few wildcard patterns (*)")
       val bot = Bot(getClass.getResourceAsStream("/bot/simple_wildcard1.aiml"))
@@ -133,9 +133,8 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
       Then("the bot should give the default response: 'THIS IS THE FOURTH RESPONSE.'")
       response5 shouldBe "THIS IS THE FOURTH RESPONSE."
     }
-  }
-
-
+    // http://www.vrconsulting.it/VHF/topic.asp?ARCHIVE=true&TOPIC_ID=829
+    // http://aiml.1580448.n4.nabble.com/wildcard-vs-td2019299.html
     scenario("A brain with a mix wildcard (_,*) patterns (/bot/wildcard_precedence1.aiml)"){
       Given("a bot with a mix wildcard (_,*) patterns")
       val bot = Bot(getClass.getResourceAsStream("/bot/wildcard_precedence1.aiml"))
@@ -155,5 +154,6 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
       Then("the bot should give the response: 'MIXED PATTERN MATCHED.'")
       response3 shouldBe "MIXED PATTERN MATCHED."
     }
+  }
 
 }
