@@ -135,4 +135,25 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
     }
   }
 
+
+    scenario("A brain with a mix wildcard (_,*) patterns (/bot/wildcard_precedence1.aiml)"){
+      Given("a bot with a mix wildcard (_,*) patterns")
+      val bot = Bot(getClass.getResourceAsStream("/bot/wildcard_precedence1.aiml"))
+
+      When("A question matching both * and _: 'Science is just great'")
+      val response1 = bot ask "Science is just great"
+      Then("the bot should give the response: 'UNDSERSCORE MATCHED.'")
+      response1 shouldBe "UNDSERSCORE MATCHED."
+
+      When("A question matching exactly a pattern: 'Internet is just great'")
+      val response2 = bot ask "Internet is just great"
+      Then("the bot should give the response: 'UNDSERSCORE MATCHED.'")
+      response2 shouldBe "UNDSERSCORE MATCHED."
+
+      When("A question matching exactly a mixed pattern: 'My house is just to small'")
+      val response3 = bot ask "My house is just to small"
+      Then("the bot should give the response: 'MIXED PATTERN MATCHED.'")
+      response3 shouldBe "MIXED PATTERN MATCHED."
+    }
+
 }

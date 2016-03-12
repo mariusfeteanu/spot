@@ -1,0 +1,20 @@
+<aiml version="1.0">
+
+<category>
+  <pattern>* IS JUST GREAT</pattern>
+  <template>STAR MATCHED.</template>
+</category>
+<category>
+  <pattern>_ IS JUST GREAT</pattern>
+  <template>UNDSERSCORE MATCHED.</template>
+</category>
+<category>
+  <pattern>INTERNET IS JUST GREAT</pattern>
+  <template>FULL SENTENCE MATCHED.</template>
+</category>
+<category>
+  <pattern>_ IS JUST *</pattern>
+  <template>MIXED PATTERN MATCHED.</template>
+</category>
+
+</aiml>
