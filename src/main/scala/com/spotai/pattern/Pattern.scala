@@ -24,7 +24,7 @@ import com.spotai.Bot
 /*
 Represents a pattern that has to be matched by user input.
 */
-case class Pattern(patternElements:List[PatternElement]){
+case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern]{
 
   def this(stringPattern:String) = {this(
    stringPattern.split(" ").filter(_.size>0).map({
@@ -32,6 +32,29 @@ case class Pattern(patternElements:List[PatternElement]){
       case "_" => WildUnder()
       case patternWord:String => PatternWord(Bot.normalize(patternWord))}).toList
   )}
+
+  /*
+  Result of comparing this with operand that.
+  returns x where
+    x < 0 iff this < that
+    x == 0 iff this == that
+    x > 0 iff this > that
+  */
+  override def compare(that:Pattern) = {
+    def compPattern(left:List[PatternElement], right:List[PatternElement]):Int = {
+      if (left.isEmpty)
+        if (right.isEmpty) 0
+        else 1 // The longer pattern will be mached first (TODO: is this correct)
+      else
+        if (right.isEmpty) -1 // The longer pattern will be mached first (TODO: is this correct)
+        else {
+          if (left.head>right.head) 1
+          if (left.head<right.head) -1
+          else compPattern(left.tail, right.tail)
+        }
+    }
+    compPattern(this.patternElements, that.patternElements)
+  }
 
   /*
   Main pattern method

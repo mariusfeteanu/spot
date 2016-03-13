@@ -23,4 +23,16 @@ import com.spotai.template.Template
 /*
 Represents an AIML category.
 */
-case class Category(stimulus:Pattern, response:Template, that:Option[Pattern], topic:Option[Pattern])
+case class Category(stimulus:Pattern, response:Template, that:Option[Pattern], topic:Option[Pattern]) extends Ordered[Category] {
+
+    /*
+    Result of comparing this with operand that.
+    returns x where
+      x < 0 iff this < that
+      x == 0 iff this == that
+      x > 0 iff this > that
+    */
+    override def compare(that:Category) = {
+      this.stimulus.compare(that.stimulus)
+    }
+}

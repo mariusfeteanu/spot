@@ -13,10 +13,6 @@
   <template>THIS IS THE THIRD RESPONSE.</template>
 </category>
 <category>
-  <pattern>_</pattern>
-  <template>THIS IS THE FOURTH RESPONSE.</template>
-</category>
-<category>
   <pattern>BYE THERE</pattern>
   <template>THIS IS THE NEVER RESPONSE.</template>
 </category>

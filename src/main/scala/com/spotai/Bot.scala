@@ -150,7 +150,7 @@ object Bot {
   }).toList
   }
 
-  def apply(categories:List[Category]):Bot = new Bot(categories)
+  def apply(categories:List[Category]):Bot = new Bot(categories.sorted)
 
   def apply(fileName:String):Bot = apply(categoriesFromXML(XML.loadFile(fileName)))
 

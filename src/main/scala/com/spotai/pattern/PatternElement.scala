@@ -21,4 +21,32 @@ package pattern
 /*
 Any element of a pattern, extend this to create new ones.
 */
-abstract class PatternElement
+class PatternElement extends Ordered[PatternElement] {
+
+  /*
+  Result of comparing this with operand that.
+  returns x where
+    x < 0 iff this < that
+    x == 0 iff this == that
+    x > 0 iff this > that
+  */
+  override def compare(that:PatternElement) = {
+    this match {
+      case _:WildUnder => that match {
+        case _:WildUnder => 0
+        case _:PatternWord => -1
+        case _:WildStar => -1
+      }
+      case thisw:PatternWord => that match {
+        case _:WildUnder => 1
+        case thatw:PatternWord => if (thisw.word<thatw.word) -1 else if (thisw.word==thatw.word) 0 else 1
+        case _:WildStar => -1
+      }
+      case _:WildStar => that match {
+        case _:WildUnder => 1
+        case _:PatternWord => 1
+        case _:WildStar => 0
+      }
+    }
+  }
+}
