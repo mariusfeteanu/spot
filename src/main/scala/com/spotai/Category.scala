@@ -33,6 +33,15 @@ case class Category(stimulus:Pattern, response:Template, that:Option[Pattern], t
       x > 0 iff this > that
     */
     override def compare(that:Category) = {
-      this.stimulus.compare(that.stimulus)
+      this.that match {
+        case None => that.that match {
+          case None => this.stimulus.compare(that.stimulus)
+          case Some(that_that:Pattern) => 1
+        }
+        case Some(this_that:Pattern) => that.that match {
+          case None => -1
+          case Some(that_that:Pattern) => this_that.compare(that_that) //needs moar thats?
+        }
+      }
     }
 }

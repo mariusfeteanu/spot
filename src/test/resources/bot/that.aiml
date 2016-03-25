@@ -1,0 +1,26 @@
+<aiml version="1.0">
+   <category>
+      <pattern>HOW ABOUT PIZZA</pattern>
+      <template>Do you like pepperoni?</template>
+   </category>
+
+   <category>
+      <pattern>YES</pattern>
+      <template>Yes, what?</template>
+   </category>
+   <category>
+      <pattern>NO</pattern>
+      <template>No, what?</template>
+   </category>
+
+   <category>
+      <pattern>YES</pattern>
+      <that>DO YOU LIKE PEPPERONI</that>
+      <template>I like pepperoni pizza too</template>
+   </category>
+   <category>
+      <pattern>NO</pattern>
+      <that>DO YOU LIKE PEPPERONI</that>
+      <template>That's fine, we can have something other than pepperoni</template>
+   </category>
+</aiml>

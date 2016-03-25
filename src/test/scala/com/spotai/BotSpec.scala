@@ -151,4 +151,23 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
     }
   }
 
+  feature("Matching using the <THAT> element.") {
+    scenario("A brain with a simple <that> redirect (/bot/that.aiml)"){
+      Given("a bot with a <that> redirect")
+      val bot = Bot(getClass.getResourceAsStream("/bot/that.aiml"))
+
+      When("It is given a question not matched by <that>: 'YES'")
+      val response1 = bot ask "YES"
+      Then("it gives a default response: 'Yes, what?'")
+      response1 shouldBe "Yes, what?"
+
+      When("It is given a question matched by <that>: 'NO'")
+      val that = bot ask "How about pizza?" // setup the <that> element
+      val response2 = bot ask "NO"
+      Then("it gives a default response: 'That's fine, we can have something other than pepperoni'")
+      that shouldBe "Do you like pepperoni?"
+      response2 shouldBe "That's fine, we can have something other than pepperoni"
+    }
+  }
+
 }
