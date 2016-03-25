@@ -79,6 +79,19 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
         case Nil => None
         // Check that the word actually matches
         case _ => patternElements.head match {
+          // We check if it is time to match <that> or <topic> first
+          // these are implemented as elements at the end of the Pattern
+          // separated by placeholders
+          case _:ThatPlaceholder
+            => input.head match {
+              case "<THAT>" => Pattern(patternElements.tail).matches(input.tail, context)
+              case _ => None
+            }
+          case _:TopicPlaceholder
+            => input.head match {
+              case "<TOPIC>" => Pattern(patternElements.tail).matches(input.tail, context)
+              case _ => None
+            }
           // The underscore wildcard has highes priority
           case _:WildUnder /* We try to match the wild card on the tail*/
             => Pattern(patternElements.tail).matches(input.tail, context.withStar(input.head)) match {

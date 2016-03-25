@@ -51,19 +51,36 @@ class Bot(categories:List[Category]){
       - that
       */
       categories.find({category =>
+      /*
       // TODO: Check that the topic matches, if topic is set
       (category.topic match {
         case None => true
         case Some(topic:Pattern) => topic.matches(Bot.split(input), patternContext).isDefined
-      }) &&
+      }) &&*/
       // We check that the actual pattern matches
-      (category.stimulus.matches(Bot.split(input), patternContext) match {
+      val stimulus = Pattern(
+                      category.stimulus.patternElements ++
+                      (ThatPlaceholder() ::
+                      (category.that match {case None => List[PatternElement](WildStar()); case Some(t:Pattern) => t.patternElements}) ++
+                      (TopicPlaceholder() ::
+                      (category.topic match {case None => List[PatternElement](WildStar()); case Some(t:Pattern) => t.patternElements})
+                      )))
+
+      val question = Bot.split(input) ++
+                      ("<THAT>" ::
+                      (
+                        (this.context.lastResponse match {case None => List[String](""); case Some(that:String) => Bot.split(that)}) ++
+                        List[String]("<TOPIC>", "")
+                      )
+                      )
+
+      stimulus.matches(question, patternContext) match {
         case None => false
         case Some(matchPatternContext) => {
           patternContext = matchPatternContext
           true
         }
-      }) &&
+      } /*&&
       // If this category has <that> set, then check that it matches the last repsonse
       (category.that match {
         // No last response filter is set
@@ -75,7 +92,7 @@ class Bot(categories:List[Category]){
           // Check that the last response actually matches the <that/> filter
           case Some(someResponse:String) => that.matches(Bot.split(someResponse), patternContext).isDefined
         }
-      })
+      })*/
 
     }) match {
       case Some(category:Category) =>{
@@ -171,5 +188,5 @@ object Bot {
 
   def normalize(input:String) = input.toUpperCase.replaceAll("[^a-zA-Z 0-9]", "").replaceAll("\\s", " ")
 
-  def split(input:String) = normalize(input).split(" ").filter(_.size>0)
+  def split(input:String) = normalize(input).split(" ").filter(_.size>0).toList
 }
