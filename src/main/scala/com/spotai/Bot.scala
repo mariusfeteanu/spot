@@ -51,12 +51,6 @@ class Bot(categories:List[Category]){
       - that
       */
       categories.find({category =>
-      /*
-      // TODO: Check that the topic matches, if topic is set
-      (category.topic match {
-        case None => true
-        case Some(topic:Pattern) => topic.matches(Bot.split(input), patternContext).isDefined
-      }) &&*/
       // We check that the actual pattern matches
       val stimulus = Pattern(
                       category.stimulus.patternElements ++
@@ -80,20 +74,7 @@ class Bot(categories:List[Category]){
           patternContext = matchPatternContext
           true
         }
-      } /*&&
-      // If this category has <that> set, then check that it matches the last repsonse
-      (category.that match {
-        // No last response filter is set
-        case None => true
-        // We have some last pattern to check
-        case Some(that:Pattern) => this.context.lastResponse match {
-          // But we have no last response to check against (maybe first question)
-          case None => false
-          // Check that the last response actually matches the <that/> filter
-          case Some(someResponse:String) => that.matches(Bot.split(someResponse), patternContext).isDefined
-        }
-      })*/
-
+      }
     }) match {
       case Some(category:Category) =>{
         // We save the current response, and use it to match <that/> next time
