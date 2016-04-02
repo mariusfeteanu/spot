@@ -92,7 +92,7 @@ class Bot(categories:List[Category]){
 
 object Bot {
   /*
-  Parses and XML and loads categories from it
+  Parses an XML and loads categories from it
   */
   def categoriesFromXML(xmlAIML:Elem):List[Category] = {
     /* Loads a category xml node */
@@ -161,14 +161,7 @@ object Bot {
   def apply(categories:List[Category], context:BotContext):Bot = new Bot(categories, context)
 
   def fromFileNames(fileNames:List[String]):Bot = apply(fileNames.flatMap({case fileName =>
-    try {
-      categoriesFromXML(XML.loadFile(fileName))
-    } catch {
-      case ex:Exception => {
-        println("Failed to load file " + fileName + ", exception: " + ex.getMessage)
-        Nil
-      }
-    }
+    categoriesFromXML(XML.loadFile(fileName))
   }))
 
   def normalize(input:String) = input.replaceAll("[^a-zA-Z 0-9]", "").replaceAll("\\s", " ")
