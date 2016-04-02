@@ -175,26 +175,26 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
       Given("a bot with <set> and <get> elements.")
       val bot = Bot(getClass.getResourceAsStream("/bot/set_get.aiml"))
 
-      // When("Asked the value of a predicate it doesn't know: 'What is x?'")
-      // val response1 = bot ask "What is x?"
-      // Then("it gives a default response: 'X is .'")
-      // response1 shouldBe "X is  ."
+      When("Asked the value of a predicate it doesn't know: 'What is x?'")
+      val response1 = bot ask "What is x?"
+      Then("it gives a default response: 'X is .'")
+      response1 shouldBe "X is ."
 
       When("When told the value of a variable: 'x is blue'")
       val response2 = bot ask "x is blue"
       Then("it should aknowledge the set value: 'Okay, X is blue.'")
       response2 shouldBe "Okay, X is blue."
 
-      // When("When told the value of a variable: 'y is red'")
-      // val response3 = bot ask "y is blue"
-      // Then("it should aknowledge the set value: 'Okay, Y is red.'")
-      // response3 shouldBe "Okay, Y is blue."
-      // Then("it should still remember the value set the first time")
-      // val response4 = bot ask "what is x?"
-      // response4 shouldBe "X is blue."
-      // Then("it should also know the one set now")
-      // val response5 = bot ask "what is y?"
-      // response5 shouldBe "X is red."
+      When("When told the value of a variable: 'y is red'")
+      val response3 = bot ask "y is blue"
+      Then("it should aknowledge the set value: 'Okay, Y is red.'")
+      response3 shouldBe "Okay, Y is blue."
+      Then("it should still remember the value set the first time")
+      val response4 = bot ask "what is x?"
+      response4 shouldBe "X is blue."
+      Then("it should also know the one set now")
+      val response5 = bot ask "what is y?"
+      response5 shouldBe "Y is blue."
     }
   }
 
