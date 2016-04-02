@@ -64,8 +64,6 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
   TODO: this nukes the context on success
   */
   def matches(input:Seq[String], context:PatternContext):Option[PatternContext] = {
-    // println(">>" + input.mkString(" "))
-    // println("*" + context.star + "*" + context.inputDone.toString + "*")
     /* Look at the current input to see if it matches */
     input match {
       // We reached the end of the user input

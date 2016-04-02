@@ -1,3 +1,4 @@
+// scalastyle:off
 /*
 Spot is a bot, implementing a subset of AIML, and some extensions.
 Copyright (C) 2016  Marius Feteanu
