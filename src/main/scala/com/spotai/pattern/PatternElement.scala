@@ -30,6 +30,9 @@ class PatternElement extends Ordered[PatternElement] {
     x == 0 iff this == that
     x > 0 iff this > that
   */
+  // Turning off cyclomatic complexity checking here because the code is crystal clear
+  // and any refactoring will make it more unclear
+  // scalastyle:off cyclomatic.complexity
   override def compare(that:PatternElement) = {
     this match {
       case _:WildUnder => that match {
@@ -49,4 +52,5 @@ class PatternElement extends Ordered[PatternElement] {
       }
     }
   }
+  // scalastyle:on
 }
