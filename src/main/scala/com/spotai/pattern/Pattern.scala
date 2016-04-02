@@ -43,14 +43,14 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
   override def compare(that:Pattern) = {
     def compPattern(left:List[PatternElement], right:List[PatternElement]):Int = {
       if (left.isEmpty)
-        if (right.isEmpty) 0
-        else 1 // The longer pattern will be mached first (TODO: is this correct)
+        if (right.isEmpty) {0}
+        else {1} // The longer pattern will be mached first (TODO: is this correct)
       else
-        if (right.isEmpty) -1 // The longer pattern will be mached first (TODO: is this correct)
+        if (right.isEmpty) {-1} // The longer pattern will be mached first (TODO: is this correct)
         else {
-          if (left.head>right.head) 1
-          if (left.head<right.head) -1
-          else compPattern(left.tail, right.tail)
+          if (left.head>right.head) {1}
+          if (left.head<right.head) {-1}
+          else {compPattern(left.tail, right.tail)}
         }
     }
     compPattern(this.patternElements, that.patternElements)
