@@ -37,6 +37,26 @@ class Bot(categories:List[Category]){
     this.context = context
   }
 
+  def getStimulus(category:Category) = {
+    Pattern(
+      category.stimulus.patternElements ++
+      (ThatPlaceholder() ::
+      (category.that match {case None => List[PatternElement](WildStar()); case Some(t:Pattern) => t.patternElements}) ++
+      (TopicPlaceholder() ::
+      (category.topic match {case None => List[PatternElement](WildStar()); case Some(t:Pattern) => t.patternElements})
+      )))
+  }
+
+  def getQuestion(input:String) = {
+    Bot.split(input) ++
+    ("<THAT>" ::
+    (
+      (this.context.lastResponse match {case None => List[String](""); case Some(that:String) => Bot.split(that)}) ++
+      List[String]("<TOPIC>", "")
+    )
+    )
+  }
+
   /*
   Main bot method, provides a response to a stimulus
   */
@@ -52,21 +72,8 @@ class Bot(categories:List[Category]){
       */
       categories.find({category =>
       // We check that the actual pattern matches
-      val stimulus = Pattern(
-                      category.stimulus.patternElements ++
-                      (ThatPlaceholder() ::
-                      (category.that match {case None => List[PatternElement](WildStar()); case Some(t:Pattern) => t.patternElements}) ++
-                      (TopicPlaceholder() ::
-                      (category.topic match {case None => List[PatternElement](WildStar()); case Some(t:Pattern) => t.patternElements})
-                      )))
-
-      val question = Bot.split(input) ++
-                      ("<THAT>" ::
-                      (
-                        (this.context.lastResponse match {case None => List[String](""); case Some(that:String) => Bot.split(that)}) ++
-                        List[String]("<TOPIC>", "")
-                      )
-                      )
+      val stimulus = getStimulus(category)
+      val question = getQuestion(input)
 
       stimulus.matches(question, patternContext) match {
         case None => false
@@ -91,59 +98,70 @@ class Bot(categories:List[Category]){
 }
 
 object Bot {
+
+  // The node name ("label") indicates the type template element to create
+  def parseTemplateSimpleElement(wordNode:Node) = {
+    wordNode.label match {
+      // A <star/> node indicates that the element should be replaced by the star pattern
+      case "star" => List(TemplateStar())
+      case "get"  => List(TemplateGetName((wordNode \ "@name").text))
+      // Otherwise we assume it's text
+      case _ => wordNode.text match {
+        case text if text.trim =="" => Nil
+        case text => List(TemplateWord(text))
+      }
+    }
+  }
+
+  // The name of the node indicates which type of advanced element we create
+  def parseTemplateCompoundElement(nodeElem:Node) = {
+    nodeElem.label match {
+      // The srai is a template itself so we pass it as such now
+      case "srai"   => List(Srai(parseTemplate( nodeElem )))
+      case "set"    => List(TemplateSetName((nodeElem \ "@name").text, parseTemplate( nodeElem )))
+      case "random" => List(TemplateRandom((nodeElem \ "li").map({
+        case li => Template(parseTemplate(li))
+      }).toList))
+      // This means the element type is not implemented
+      case _ => Nil
+  }
+}
+
+  /* Parse a template xml node */
+  def parseTemplate(template:Node):List[TemplateElement] = {
+    // Go though all the children of the template node, each one contains a type of template
+    template.nonEmptyChildren.flatMap({
+      // If the current node has no children then it gets parsed itself
+      case wordNode:Node if wordNode.nonEmptyChildren.size == 0
+        => parseTemplateSimpleElement(wordNode)
+      // If the current node has children then it needs to be instantied to a complex template element
+      case nodeElem:Node
+        => parseTemplateCompoundElement(nodeElem)
+      // Not sure if this ever happens
+      case _ => Nil
+      }).map({ // We go once more through the template elements to make sure they have the right class
+        case templateElement:TemplateElement => templateElement
+        case _ => throw new RuntimeException("this never happens")
+      }).toList // to List because it's easier to qork qith than some Seq
+  }
+
+  /* Loads a category xml node */
+  def parseCategory(category:Node) = {
+
+    Category(
+      new Pattern( (category \ "pattern").text),
+      new Template(parseTemplate( (category \ "template").head)),
+      ((category \ "that").text) match {
+        case "" => None
+        case that:String => Some(new Pattern(that))},
+      None
+    )
+  }
+
   /*
   Parses an XML and loads categories from it
   */
   def categoriesFromXML(xmlAIML:Elem):List[Category] = {
-    /* Loads a category xml node */
-    def parseCategory(category:Node) = {
-      /* Parse a template xml node */
-      def parseTemplate(template:Node):List[TemplateElement] = {
-        // Go though all the children of the template node, each one contains a type of template
-        template.nonEmptyChildren.flatMap({
-          // If the current node has no children then it gets parsed itself
-          case wordNode:Node if wordNode.nonEmptyChildren.size == 0
-            // The node name ("label") indicates the type template element to create
-            => wordNode.label match {
-              // A <star/> node indicates that the element should be replaced by the star pattern
-              case "star" => List(TemplateStar())
-              case "get"  => List(TemplateGetName((wordNode \ "@name").text))
-              // Otherwise we assume it's text
-              case _ => wordNode.text match {
-                case text if text.trim =="" => Nil
-                case text => List(TemplateWord(text))
-              }
-            }
-          // If the current node has children then it needs to be instantied to a complex template element
-          case nodeElem:Node
-            // The name of the node indicates which type of advanced element we create
-            => nodeElem.label match {
-              // The srai is a template itself so we pass it as such now
-              case "srai"   => List(Srai(parseTemplate( nodeElem )))
-              case "set"    => List(TemplateSetName((nodeElem \ "@name").text, parseTemplate( nodeElem )))
-              case "random" => List(TemplateRandom((nodeElem \ "li").map({
-                case li => Template(parseTemplate(li))
-              }).toList))
-              // This means the element type is not implemented
-              case _ => Nil
-          }
-          // Not sure if this ever happens
-          case _ => Nil
-          }).map({ // We go once more through the template elements to make sure they have the right class
-            case templateElement:TemplateElement => templateElement
-            case _ => throw new RuntimeException("this never happens")
-          }).toList // to List because it's easier to qork qith than some Seq
-      }
-
-      Category(
-        new Pattern( (category \ "pattern").text),
-        new Template(parseTemplate( (category \ "template").head)),
-        ((category \ "that").text) match {
-          case "" => None
-          case that:String => Some(new Pattern(that))},
-        None
-      )
-    }
     /* Categories without topics */
   (xmlAIML \ "category").map({case category => parseCategory(category)}).toList :::
   /* Cateories with topics */
