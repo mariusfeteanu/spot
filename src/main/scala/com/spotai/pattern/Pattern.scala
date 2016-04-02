@@ -61,8 +61,12 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
   - checks that the input matches
   - return None if it doesn't match
   - returns the match context if matched
-  TODO: this nukes the context on success
   */
+  // Turning off cyclomatic complexity checking here because
+  // I have decided that a sequence of case statements is the best way to express this
+  // I also turn off method lenth checking for the same reason
+  // scalastyle:off cyclomatic.complexity
+  // scalastyle:off  method.length
   def matches(input:Seq[String], context:PatternContext):Option[PatternContext] = {
     /* Look at the current input to see if it matches */
     input match {
@@ -118,4 +122,5 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
       }
     }
   }
+  // scalastyle:on
 }
