@@ -1,0 +1,19 @@
+<aiml version="1.0">
+
+  <category><pattern>X IS *</pattern>
+    <template>Okay, X is <set name="X"><star/></set>.</template>
+  </category>
+
+  <category><pattern>WHAT IS X</pattern>
+    <template>X is <get name="X"/>.</template>
+  </category>
+
+  <category><pattern>Y IS *</pattern>
+    <template>Okay, Y is <set name="Y"><star/></set>.</template>
+  </category>
+
+  <category><pattern>WHAT IS Y</pattern>
+    <template>Y is <get name="Y"/>.</template>
+  </category>
+
+</aiml>

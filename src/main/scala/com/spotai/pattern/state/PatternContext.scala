@@ -24,9 +24,22 @@ The context in which a pattern was matched.
 */
 case class PatternContext(
   // The value of the matched star wildcard
-  star:String
+  star:String,
+  inputDone:Boolean
 ){
+  def this(star:String) = this(star, false)
+
   def withStar(star:String) = {
-    PatternContext((this.star + " " + star).trim)
+    star match {
+      case _ if this.star != "" && inputDone => this
+      case _ if this.star != "" && !inputDone => PatternContext(this.star + " " + star, this.inputDone)
+      case _ => PatternContext(star, this.inputDone)
+    }
+  }
+}
+
+object PatternContext {
+  def apply(star:String):PatternContext = {
+    new PatternContext(star)
   }
 }

@@ -44,7 +44,7 @@ class Bot(categories:List[Category]){
     /*
     This is variable because we need to re-assign it based on the result of the match
     */
-    var patternContext = PatternContext("")
+    var patternContext = PatternContext("", false)
     /* We look through all the configured categories to find one that maches, we check
       - topic
       - question (stimulus, input, pattern whatever)
@@ -109,7 +109,11 @@ object Bot {
               case "star" => List(TemplateStar())
               case "get"  => List(TemplateGetName((wordNode \ "@name").text))
               // Otherwise we assume it's text
-              case _ => wordNode.text.split(" ").map({case templateWord:String => TemplateWord(templateWord)}).toList}
+              case _ => wordNode.text match {
+                case text if text.trim =="" => Nil
+                case text => List(TemplateWord(text))
+              }
+            }
           // If the current node has children then it needs to be instantied to a complex template element
           case nodeElem:Node
             // The name of the node indicates which type of advanced element we create
@@ -167,7 +171,7 @@ object Bot {
     }
   }))
 
-  def normalize(input:String) = input.toUpperCase.replaceAll("[^a-zA-Z 0-9]", "").replaceAll("\\s", " ")
+  def normalize(input:String) = input.replaceAll("[^a-zA-Z 0-9]", "").replaceAll("\\s", " ")
 
   def split(input:String) = normalize(input).split(" ").filter(_.size>0).toList
 }

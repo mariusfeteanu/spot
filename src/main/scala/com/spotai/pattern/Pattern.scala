@@ -30,7 +30,7 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
    stringPattern.split(" ").filter(_.size>0).map({
       case "*" => WildStar()
       case "_" => WildUnder()
-      case patternWord:String => PatternWord(Bot.normalize(patternWord))}).toList
+      case patternWord:String => PatternWord(Bot.normalize(patternWord).toUpperCase)}).toList
   )}
 
   /*
@@ -64,6 +64,8 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
   TODO: this nukes the context on success
   */
   def matches(input:Seq[String], context:PatternContext):Option[PatternContext] = {
+    // println(">>" + input.mkString(" "))
+    // println("*" + context.star + "*" + context.inputDone.toString + "*")
     /* Look at the current input to see if it matches */
     input match {
       // We reached the end of the user input
@@ -84,7 +86,7 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
           // separated by placeholders
           case _:ThatPlaceholder
             => input.head match {
-              case "<THAT>" => Pattern(patternElements.tail).matches(input.tail, context)
+              case "<THAT>" => Pattern(patternElements.tail).matches(input.tail, PatternContext(context.star, true))
               case _ => None
             }
           case _:TopicPlaceholder
@@ -101,7 +103,7 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
               case found => found
             }
           // If the current word matches the current pattern we can continue
-          case patternWord:PatternWord if patternWord.word == input.head
+          case patternWord:PatternWord if patternWord.word == input.head.toUpperCase
             => Pattern(patternElements.tail).matches(input.tail, context)
           // The start wildcard has lowest priority
           case _:WildStar /* We try to match the wild card on the tail*/
