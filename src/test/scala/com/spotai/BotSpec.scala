@@ -134,20 +134,39 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
       Given("a bot with a mix wildcard (_,*) patterns")
       val bot = Bot(getClass.getResourceAsStream("/bot/wildcard_precedence1.aiml"))
 
-      When("A question matching both * and _: 'Science is just great'")
+      When("a question matching both * and _: 'Science is just great'")
       val response1 = bot ask "Science is just great"
       Then("the bot should give the response: 'UNDSERSCORE MATCHED.'")
       response1 shouldBe "UNDSERSCORE MATCHED."
 
-      When("A question matching exactly a pattern: 'Internet is just great'")
+      When("a question matching exactly a pattern: 'Internet is just great'")
       val response2 = bot ask "Internet is just great"
       Then("the bot should give the response: 'UNDSERSCORE MATCHED.'")
       response2 shouldBe "UNDSERSCORE MATCHED."
 
-      When("A question matching exactly a mixed pattern: 'My house is just to small'")
+      When("a question matching exactly a mixed pattern: 'My house is just to small'")
       val response3 = bot ask "My house is just to small"
       Then("the bot should give the response: 'MIXED PATTERN MATCHED.'")
       response3 shouldBe "MIXED PATTERN MATCHED."
+    }
+
+    scenario("A brain that can remember variables (/bot/set_get.aiml)"){
+      Given("a bot with set and get patterns")
+      val bot = Bot(getClass.getResourceAsStream("/bot/set_get.aiml"))
+
+      When("it is told to remember that X is red")
+      val response1 = bot ask "X is red"
+      Then("it should aknowledge that X is red")
+      response1 shouldBe "Okay, X is red"
+
+      When("it is told to remember that Y is light grey")
+      val response2 = bot ask "Y is light grey"
+      Then("it should aknowledge that Y is light grey")
+      response2 shouldBe "Okay, Y is light grey"
+      And("not forget that X is red")
+      (bot ask "What is X?") shouldBe "X is red"
+      And("again that Y is light grey")
+      (bot ask "What is Y?") shouldBe "Y is light grey"
     }
   }
 
