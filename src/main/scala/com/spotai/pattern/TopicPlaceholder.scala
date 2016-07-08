@@ -17,29 +17,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package com.spotai
 package pattern
-package state
 
 /*
-The context in which a pattern was matched.
+The _ wildcar pattern element.
 */
-case class PatternContext(
-  // The value of the matched star wildcard
-  star:String,
-  inputDone:Boolean
-){
-  def this(star:String) = this(star, false)
 
-  def withStar(star:String) = {
-    star match {
-      case _ if this.star != "" && inputDone => this
-      case _ if this.star != "" && !inputDone => PatternContext(this.star + " " + star, this.inputDone)
-      case _ => PatternContext(star, this.inputDone)
+class TopicPlaceholder extends PatternElement {
+  override def equals(that:Any) = {
+    that match {
+      case _:TopicPlaceholder => true
+      case _ => false
     }
   }
+  override def hashCode = 0
+  override def toString() = "_"
 }
 
-object PatternContext {
-  def apply(star:String):PatternContext = {
-    new PatternContext(star)
+object TopicPlaceholder {
+  def apply() = {
+    new TopicPlaceholder()
   }
 }

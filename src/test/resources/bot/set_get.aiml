@@ -1,5 +1,4 @@
 <aiml version="1.0">
-
 <category><pattern>X IS *</pattern>
 <template>Okay, X is <set name="X">      <star/>     </set></template>
 </category>
@@ -15,5 +14,4 @@
 <category><pattern>WHAT IS Y</pattern>
 <template>Y is <get name="Y"/></template>
 </category>
-
 </aiml>

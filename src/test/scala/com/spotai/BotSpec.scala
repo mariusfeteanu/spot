@@ -170,4 +170,51 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
     }
   }
 
+  feature("Matching using the <THAT> element.") {
+    scenario("A brain with a simple <that> redirect (/bot/that.aiml)"){
+      Given("a bot with a <that> redirect")
+      val bot = Bot(getClass.getResourceAsStream("/bot/that.aiml"))
+
+      When("It is given a question not matched by <that>: 'YES'")
+      val response1 = bot ask "YES"
+      Then("it gives a default response: 'Yes, what?'")
+      response1 shouldBe "Yes, what?"
+
+      When("It is given a question matched by <that>: 'NO'")
+      val that = bot ask "How about pizza?" // setup the <that> element
+      val response2 = bot ask "NO"
+      Then("it gives a default response: 'That's fine, we can have something other than pepperoni'")
+      that shouldBe "Do you like pepperoni?"
+      response2 shouldBe "That's fine, we can have something other than pepperoni"
+    }
+  }
+
+  feature("Remembering variables with <set> and <get>.") {
+    scenario("A brain with a simple <that> redirect (/bot/set_get.aiml)"){
+      Given("a bot with <set> and <get> elements.")
+      val bot = Bot(getClass.getResourceAsStream("/bot/set_get.aiml"))
+
+      When("Asked the value of a predicate it doesn't know: 'What is x?'")
+      val response1 = bot ask "What is x?"
+      Then("it gives a default response: 'X is .'")
+      response1 shouldBe "X is ."
+
+      When("When told the value of a variable: 'x is blue'")
+      val response2 = bot ask "x is blue"
+      Then("it should aknowledge the set value: 'Okay, X is blue.'")
+      response2 shouldBe "Okay, X is blue."
+
+      When("When told the value of a variable: 'y is red'")
+      val response3 = bot ask "y is blue"
+      Then("it should aknowledge the set value: 'Okay, Y is red.'")
+      response3 shouldBe "Okay, Y is blue."
+      Then("it should still remember the value set the first time")
+      val response4 = bot ask "what is x?"
+      response4 shouldBe "X is blue."
+      Then("it should also know the one set now")
+      val response5 = bot ask "what is y?"
+      response5 shouldBe "Y is blue."
+    }
+  }
+
 }

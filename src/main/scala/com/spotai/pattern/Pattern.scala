@@ -43,14 +43,14 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
   override def compare(that:Pattern) = {
     def compPattern(left:List[PatternElement], right:List[PatternElement]):Int = {
       if (left.isEmpty)
-        if (right.isEmpty) 0
-        else 1 // The longer pattern will be mached first (TODO: is this correct)
+        if (right.isEmpty) {0}
+        else {1} // The longer pattern will be mached first (TODO: is this correct)
       else
-        if (right.isEmpty) -1 // The longer pattern will be mached first (TODO: is this correct)
+        if (right.isEmpty) {-1} // The longer pattern will be mached first (TODO: is this correct)
         else {
-          if (left.head>right.head) 1
-          if (left.head<right.head) -1
-          else compPattern(left.tail, right.tail)
+          if (left.head>right.head) {1}
+          if (left.head<right.head) {-1}
+          else {compPattern(left.tail, right.tail)}
         }
     }
     compPattern(this.patternElements, that.patternElements)
@@ -61,8 +61,12 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
   - checks that the input matches
   - return None if it doesn't match
   - returns the match context if matched
-  TODO: this nukes the context on success
   */
+  // Turning off cyclomatic complexity checking here because
+  // I have decided that a sequence of case statements is the best way to express this
+  // I also turn off method lenth checking for the same reason
+  // scalastyle:off cyclomatic.complexity
+  // scalastyle:off  method.length
   def matches(input:Seq[String], context:PatternContext):Option[PatternContext] = {
     /* Look at the current input to see if it matches */
     input match {
@@ -79,6 +83,19 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
         case Nil => None
         // Check that the word actually matches
         case _ => patternElements.head match {
+          // We check if it is time to match <that> or <topic> first
+          // these are implemented as elements at the end of the Pattern
+          // separated by placeholders
+          case _:ThatPlaceholder
+            => input.head match {
+              case "<THAT>" => Pattern(patternElements.tail).matches(input.tail, PatternContext(context.star, true))
+              case _ => None
+            }
+          case _:TopicPlaceholder
+            => input.head match {
+              case "<TOPIC>" => Pattern(patternElements.tail).matches(input.tail, context)
+              case _ => None
+            }
           // The underscore wildcard has highes priority
           case _:WildUnder /* We try to match the wild card on the tail*/
             => Pattern(patternElements.tail).matches(input.tail, context.withStar(input.head)) match {
@@ -105,4 +122,5 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
       }
     }
   }
+  // scalastyle:on
 }
