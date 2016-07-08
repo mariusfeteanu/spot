@@ -149,25 +149,6 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
       Then("the bot should give the response: 'MIXED PATTERN MATCHED.'")
       response3 shouldBe "MIXED PATTERN MATCHED."
     }
-
-    scenario("A brain that can remember variables (/bot/set_get.aiml)"){
-      Given("a bot with set and get patterns")
-      val bot = Bot(getClass.getResourceAsStream("/bot/set_get.aiml"))
-
-      When("it is told to remember that X is red")
-      val response1 = bot ask "X is red"
-      Then("it should aknowledge that X is red")
-      response1 shouldBe "Okay, X is red"
-
-      When("it is told to remember that Y is light grey")
-      val response2 = bot ask "Y is light grey"
-      Then("it should aknowledge that Y is light grey")
-      response2 shouldBe "Okay, Y is light grey"
-      And("not forget that X is red")
-      (bot ask "What is X?") shouldBe "X is red"
-      And("again that Y is light grey")
-      (bot ask "What is Y?") shouldBe "Y is light grey"
-    }
   }
 
   feature("Matching using the <THAT> element.") {
@@ -196,24 +177,24 @@ class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
 
       When("Asked the value of a predicate it doesn't know: 'What is x?'")
       val response1 = bot ask "What is x?"
-      Then("it gives a default response: 'X is .'")
-      response1 shouldBe "X is ."
+      Then("it gives a default response: 'X is '")
+      response1 shouldBe "X is "
 
       When("When told the value of a variable: 'x is blue'")
       val response2 = bot ask "x is blue"
-      Then("it should aknowledge the set value: 'Okay, X is blue.'")
-      response2 shouldBe "Okay, X is blue."
+      Then("it should aknowledge the set value: 'Okay, X is blue'")
+      response2 shouldBe "Okay, X is blue"
 
-      When("When told the value of a variable: 'y is red'")
-      val response3 = bot ask "y is blue"
-      Then("it should aknowledge the set value: 'Okay, Y is red.'")
-      response3 shouldBe "Okay, Y is blue."
+      When("When told the value of a variable: 'y is light grey'")
+      val response3 = bot ask "y is light grey"
+      Then("it should aknowledge the set value: 'Okay, Y is light grey'")
+      response3 shouldBe "Okay, Y is light grey"
       Then("it should still remember the value set the first time")
       val response4 = bot ask "what is x?"
-      response4 shouldBe "X is blue."
+      response4 shouldBe "X is blue"
       Then("it should also know the one set now")
       val response5 = bot ask "what is y?"
-      response5 shouldBe "Y is blue."
+      response5 shouldBe "Y is light grey"
     }
   }
 
