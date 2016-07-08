@@ -24,3 +24,7 @@ project/sbt-ui.sbt
 
 # debug files
 bot.db
+
+#IntelliJ IDEA
+/out/
+.idea/
