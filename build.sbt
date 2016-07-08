@@ -1,7 +1,7 @@
 lazy val root = (project in file(".")).
   settings(
     name := "spot",
-    version := "1.0",
+    version := "1.0.0",
     scalaVersion := "2.11.7"
   )
 
@@ -30,3 +30,38 @@ mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
     case x => MergeStrategy.first
    }
 }
+
+publishMavenStyle := true
+
+publishTo := {
+  val nexus = "https://oss.sonatype.org/"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "content/repositories/snapshots")
+  else
+    Some("releases"  at nexus + "service/local/staging/deploy/maven2")
+}
+
+publishArtifact in Test := false
+
+pomIncludeRepository := { _ => false }
+
+pomExtra := (
+  <url>https://github.com/mariusfeteanu/spot</url>
+  <licenses>
+    <license>
+      <name>GPLv3</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>git@github.com:mariusfeteanu/spot.git</url>
+    <connection>scm:git:git@github.com:mariusfeteanu/spot.git</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>mariusfeteanu</id>
+      <name>Marius Feteanu</name>
+      <url>https://github.com/mariusfeteanu</url>
+    </developer>
+  </developers>)
