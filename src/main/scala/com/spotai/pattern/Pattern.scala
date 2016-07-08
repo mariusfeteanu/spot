@@ -88,7 +88,7 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
               case found => found
             }
           // If the current word matches the current pattern we can continue
-          case patternWord:PatternWord if patternWord.word == input.head
+          case patternWord:PatternWord if patternWord.word == input.head.toUpperCase
             => Pattern(patternElements.tail).matches(input.tail, context)
           // The start wildcard has lowest priority
           case _:WildStar /* We try to match the wild card on the tail*/

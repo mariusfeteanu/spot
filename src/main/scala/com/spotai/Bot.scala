@@ -169,7 +169,7 @@ object Bot {
     }
   }))
 
-  def normalize(input:String) = input.toUpperCase.replaceAll("[^a-zA-Z 0-9]", "").replaceAll("\\s", " ")
+  def normalize(input:String) = input.replaceAll("[^a-zA-Z 0-9]", "").replaceAll("\\s", " ")
 
   def split(input:String) = normalize(input).split(" ").filter(_.size>0)
 }
