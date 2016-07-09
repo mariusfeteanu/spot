@@ -15,7 +15,6 @@ libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.8.11.2"
 libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 libraryDependencies += "com.typesafe.akka" % "akka-actor_2.11" % "2.4.8"
 
-// mainClass in Compile  := Some("com.spotai.main.RunBasic")
 mainClass in Compile  := Some("com.spotai.main.RunActor")
 
 scalacOptions ++= Seq("-feature")
@@ -34,6 +33,7 @@ mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) =>
 
 publishMavenStyle := true
 
+// Publish to maven central
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (isSnapshot.value)
@@ -42,10 +42,13 @@ publishTo := {
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
 
+// Don't publish tests
 publishArtifact in Test := false
 
+// remove the repositories for optional dependencies
 pomIncludeRepository := { _ => false }
 
+// Add license and contact information
 pomExtra := (
   <url>https://github.com/mariusfeteanu/spot</url>
   <licenses>
