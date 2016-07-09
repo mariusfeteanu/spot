@@ -86,7 +86,6 @@ You need:
 
 Steps to test:
 
-1. ```sbt "run setup"``` (only the first time you run it on your dev machine)
 2. ```sbt run```
 3. Chat with spot (it only knows how to say hi and remember a variable called X, if you don't add more aiml files)
 4. It will also report the time the response took, in microseconds
