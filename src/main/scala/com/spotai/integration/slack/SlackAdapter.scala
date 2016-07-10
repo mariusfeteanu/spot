@@ -61,7 +61,7 @@ class SlackAdapter(authToken:String,
   val slackMessagePostedListener = new SlackMessagePostedListener() {
     override def onEvent(event: SlackMessagePosted, session: SlackSession): Unit = {
       if(event.getSender.getUserName != botName) {
-        botActor ? BotChannelAction(event.getMessageContent,
+        botActor ! BotChannelAction(event.getMessageContent,
           botName,
           event.getChannel.getId,
           action)
