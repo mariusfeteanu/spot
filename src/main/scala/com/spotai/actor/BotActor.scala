@@ -19,12 +19,12 @@ package com.spotai
 package actor
 
 import akka.actor.{Actor, Props}
-import com.spotai.actor.BotActor.BotChannelAction
 import scala.xml.XML
 import java.io.InputStream
 
 import com.spotai.state.{BotContext, BotContextType}
 import com.spotai.parse.AIMLParser
+import com.spotai.actor.BotActor.BotChannelAction
 
 class BotActor(botContextType:BotContextType, categories:List[Category]) extends Actor{
   import BotActor.BotQuestion
