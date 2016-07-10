@@ -19,13 +19,15 @@ package com.spotai
 package actor
 
 import akka.actor.{Actor, Props}
+import scala.xml.XML
+import java.io.InputStream
 
 import com.spotai.state.{BotContext, BotContextType}
 
-class BotActor(botContextType:BotContextType) extends Actor{
+class BotActor(botContextType:BotContextType, categories:List[Category]) extends Actor{
   import BotActor.BotQuestion
 
-  val bot =  Bot(getClass.getResourceAsStream("/test.aiml"))
+  val bot =  Bot(categories)
 
   var botContexts:scala.collection.mutable.Map[String, BotContext] = scala.collection.mutable.Map.empty
 
@@ -42,5 +44,13 @@ class BotActor(botContextType:BotContextType) extends Actor{
 object BotActor {
   case class BotQuestion(question:String, botInstanceId:String)
 
-  def props(botContextType:BotContextType):Props = Props(new BotActor(botContextType))
+  def props(botContextType:BotContextType, categories:List[Category]):Props =
+    Props(new BotActor(botContextType, categories))
+
+  // TODO: this duplicates code from Bot, can it not?
+  def props(botContextType:BotContextType, fileName:String):Props =
+    Props(new BotActor(botContextType, Bot.categoriesFromXML(XML.loadFile(fileName))))
+
+  def props(botContextType:BotContextType, inputStream:InputStream):Props =
+    Props(new BotActor(botContextType, Bot.categoriesFromXML(XML.load(inputStream))))
 }

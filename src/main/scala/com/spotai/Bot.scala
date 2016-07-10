@@ -22,7 +22,7 @@ import com.spotai.pattern._
 import com.spotai.template._
 
 import scala.xml.{XML, Node, Elem, Text}
-import java.io.InputStream;
+import java.io.InputStream
 
 /*
 This class implements part of the AIML language.
