@@ -20,10 +20,7 @@ package state
 
 import scala.language.postfixOps // This is so we can write 30 seconds for duration
 import scala.concurrent.{Future, Await}
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
-
-import slick.backend.DatabasePublisher
 import slick.driver.SQLiteDriver.api._
 import slick.lifted.ProvenShape.proveShapeOf
 

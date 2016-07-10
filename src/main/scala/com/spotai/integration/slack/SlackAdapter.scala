@@ -18,16 +18,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.spotai.integration.slack
 
 import java.io.InputStream
-
 import akka.actor.ActorSystem
 import akka.util.Timeout
-import akka.pattern.ask
 import com.ullink.slack.simpleslackapi.SlackSession
 import com.ullink.slack.simpleslackapi.events.SlackMessagePosted
 import com.ullink.slack.simpleslackapi.impl.SlackSessionFactory
 import com.ullink.slack.simpleslackapi.listeners.SlackMessagePostedListener
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import scala.xml.XML
 
 import com.spotai.parse.AIMLParser
 import com.spotai.Category
@@ -35,8 +34,6 @@ import com.spotai.integration.Adapter
 import com.spotai.actor.BotActor
 import com.spotai.actor.BotActor.BotChannelAction
 import com.spotai.state.BotContextType
-
-import scala.xml.XML
 
 /**
  * Created by marius on 10/07/2016.

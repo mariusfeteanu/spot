@@ -18,11 +18,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.spotai
 package parse
 
+import scala.xml.{XML, Node, Elem}
+import java.io.InputStream
+
 import com.spotai.pattern._
 import com.spotai.template._
-
-import scala.xml.{XML, Node, Elem, Text}
-import java.io.InputStream
 
 class AIMLParser(xmlAIML:Elem) {
     // The node name ("label") indicates the type template element to create

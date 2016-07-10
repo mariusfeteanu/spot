@@ -22,7 +22,6 @@ import org.scalatest._
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
 import com.spotai.pattern.state.PatternContext
-import com.spotai.Bot
 
 object PatternBasicSpec {
   def getMatches(patternString:String, question:String) = {

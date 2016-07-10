@@ -20,7 +20,6 @@ package pattern
 package state
 
 import org.scalatest._
-import org.scalatest.prop.TableDrivenPropertyChecks._
 
 class PatternContextSpec extends FlatSpec with Matchers {
   behavior of "A PatternContext."

@@ -17,13 +17,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package com.spotai
 
+import java.io.InputStream
+
 import com.spotai.state.{BotContext, MemoryBotContext}
 import com.spotai.pattern.state.PatternContext
 import com.spotai.parse.AIMLParser
 import com.spotai.pattern._
-import com.spotai.template._
-
-import java.io.InputStream
 
 /*
 This class implements part of the AIML language.

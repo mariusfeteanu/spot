@@ -21,9 +21,6 @@ package pattern
 import org.scalatest._
 import org.scalatest.prop.TableDrivenPropertyChecks._
 
-import com.spotai.pattern.state.PatternContext
-import com.spotai.Bot
-
 class PatternPrefixSpec extends FlatSpec with Matchers {
   import PatternBasicSpec.getMatches
   import PatternBasicSpec.allWildcards

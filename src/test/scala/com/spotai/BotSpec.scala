@@ -18,7 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.spotai
 
 import org.scalatest._
-import org.scalatest.prop.TableDrivenPropertyChecks._
 
 class BotSpec extends FeatureSpec with GivenWhenThen with Matchers{
 
