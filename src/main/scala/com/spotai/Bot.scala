@@ -37,7 +37,7 @@ class Bot(categories:List[Category]){
     this.context = context
   }
 
-  def getStimulus(category:Category) = {
+  private def getStimulus(category:Category) = {
     Pattern(
       category.stimulus.patternElements ++
       (ThatPlaceholder() ::
@@ -47,7 +47,7 @@ class Bot(categories:List[Category]){
       )))
   }
 
-  def getQuestion(input:String) = {
+  private def getQuestion(input:String) = {
     Bot.split(input) ++
     ("<THAT>" ::
     (
