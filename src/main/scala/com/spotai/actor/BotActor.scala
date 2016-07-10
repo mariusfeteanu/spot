@@ -19,6 +19,7 @@ package com.spotai
 package actor
 
 import akka.actor.{Actor, Props}
+import com.spotai.actor.BotActor.BotChannelAction
 import scala.xml.XML
 import java.io.InputStream
 
@@ -37,6 +38,10 @@ class BotActor(botContextType:BotContextType, categories:List[Category]) extends
       bot.context = botContexts.getOrElseUpdate(botInstanceId, BotContext(botContextType, botInstanceId))
       sender ! (bot ask question)
     }
+    case BotChannelAction(question:String, botInstanceId:String, channel:String, action:((String,String)=>Unit)) =>{
+      bot.context = botContexts.getOrElseUpdate(botInstanceId, BotContext(botContextType, botInstanceId))
+      action(channel, bot ask question)
+    }
     case _ => ???
   }
 
@@ -44,6 +49,7 @@ class BotActor(botContextType:BotContextType, categories:List[Category]) extends
 
 object BotActor {
   case class BotQuestion(question:String, botInstanceId:String)
+  case class BotChannelAction(question:String, botInstanceId:String, channel:String, action:(String,String)=>Unit)
 
   def props(botContextType:BotContextType, categories:List[Category]):Props =
     Props(new BotActor(botContextType, categories))

@@ -75,7 +75,7 @@ object RunActor {
           val responseFuture = botActor?BotQuestion(question, botInstanceId)
           val response = Await.result(responseFuture, 5 second)
           val t2 = System.nanoTime()
-          val duration = java.text.NumberFormat.getIntegerInstance().format((t2-t1)/1000)
+          val duration = java.text.NumberFormat.getIntegerInstance.format((t2-t1)/1000)
           prettypln(s"a:$response [$duration mcs]")
         }
       }
