@@ -16,8 +16,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package com.spotai
-package main
+package com.spotai.sample
+package basic
 
 import scala.io.StdIn
 import scala.concurrent.duration._
@@ -26,10 +26,15 @@ import scala.language.postfixOps
 import scala.util.Random
 import math.max
 
-import com.spotai.Bot
+import akka.actor.{ActorSystem, Props, Actor}
+import akka.pattern.ask
+import akka.util.Timeout
+
+import com.spotai.actor.BotActor
+import com.spotai.actor.BotActor.BotQuestion
 import com.spotai.state.{MemoryContext, SQLContext, BotContextType}
 
-object RunBasic {
+object RunActor {
 
   def prettypln(line:String) = {
     val rand = new Random()
@@ -48,10 +53,13 @@ object RunBasic {
       return
     }
 
-    val bot = Bot(getClass.getResourceAsStream("/test.aiml"))
+    implicit val timeout = Timeout(5 seconds)
+    val botActorSystem = ActorSystem("botActorSystem")
+    val botActor = botActorSystem.actorOf(BotActor.props(MemoryContext, getClass.getResourceAsStream("/test.aiml")), "BotActor")
 
     var bye = false
-    prettypln(s"a:talking to spot now (in basic mode)")
+    var botInstanceId = "Spot".toLowerCase
+    prettypln(s"a:talking to $botInstanceId now (in actor mode)")
 
     do{
       val userLine = StdIn.readLine("q:")
@@ -59,17 +67,20 @@ object RunBasic {
         case null => bye = true
         case "bye" => bye = true
         case question:String if question.startsWith("ask ") => {
-          prettypln(s"a:in basic mode, only spot is available")
+          botInstanceId = question.drop(4).toLowerCase
+          prettypln(s"a:talking to $botInstanceId now (in actor mode)")
         }
         case question:String => {
           val t1 = System.nanoTime()
-          val response = (bot ask question)
+          val responseFuture = botActor?BotQuestion(question, botInstanceId)
+          val response = Await.result(responseFuture, 5 second)
           val t2 = System.nanoTime()
-          val duration = java.text.NumberFormat.getIntegerInstance().format((t2-t1)/1000)
+          val duration = java.text.NumberFormat.getIntegerInstance.format((t2-t1)/1000)
           prettypln(s"a:$response [$duration mcs]")
         }
       }
     } while (!bye)
     prettypln("bye")
+    botActorSystem.terminate()
   }
 }

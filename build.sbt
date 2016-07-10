@@ -18,7 +18,11 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.6" % "test"
 libraryDependencies += "com.typesafe.akka" % "akka-actor_2.11" % "2.4.8"
 libraryDependencies += "com.github.Ullink" % "simple-slack-api" % "0.5.1"
 
-mainClass in Compile  := Some("com.spotai.integration.slack.RunSlack")
+// Samples below
+// unmanagedSourceDirectories in Compile += baseDirectory.value / "src" / "sample"
+// mainClass in Compile  := Some("com.spotai.sample.integration.RunSlack")
+// mainClass in Compile  := Some("com.spotai.sample.basic.RunActor")
+// mainClass in Compile  := Some("com.spotai.sample.basic.RunBasic")
 
 scalacOptions ++= Seq("-feature")
 scalacOptions ++= Seq("-deprecation")
