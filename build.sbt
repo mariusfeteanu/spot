@@ -24,6 +24,7 @@ libraryDependencies += "com.github.Ullink" % "simple-slack-api" % "0.5.1"
 // mainClass in Compile  := Some("com.spotai.sample.basic.RunActor")
 // mainClass in Compile  := Some("com.spotai.sample.basic.RunBasic")
 
+scalacOptions ++= Seq("-Ywarn-unused-import")
 scalacOptions ++= Seq("-feature")
 scalacOptions ++= Seq("-deprecation")
 scalacOptions ++= Seq("-unchecked")
