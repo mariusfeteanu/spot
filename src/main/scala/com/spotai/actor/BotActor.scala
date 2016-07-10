@@ -27,7 +27,7 @@ import com.spotai.parse.AIMLParser
 import com.spotai.actor.BotActor.BotChannelAction
 
 class BotActor(botContextType:BotContextType, categories:List[Category]) extends Actor{
-  import BotActor.BotQuestion
+  import BotActor._
 
   val bot =  Bot(categories)
 
