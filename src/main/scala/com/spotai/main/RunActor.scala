@@ -59,7 +59,7 @@ object RunActor {
 
     var bye = false
     var botInstanceId = "Spot".toLowerCase
-    prettypln(s"a:talking to $botInstanceId now")
+    prettypln(s"a:talking to $botInstanceId now (in actor mode)")
 
     do{
       val userLine = StdIn.readLine("q:")
@@ -68,7 +68,7 @@ object RunActor {
         case "bye" => bye = true
         case question:String if question.startsWith("ask ") => {
           botInstanceId = question.drop(4).toLowerCase
-          prettypln(s"a:talking to $botInstanceId now")
+          prettypln(s"a:talking to $botInstanceId now (in actor mode)")
         }
         case question:String => {
           val t1 = System.nanoTime()

@@ -51,7 +51,7 @@ object RunBasic {
     val bot = Bot(getClass.getResourceAsStream("/test.aiml"))
 
     var bye = false
-    prettypln(s"a:talking to spot now")
+    prettypln(s"a:talking to spot now (in basic mode)")
 
     do{
       val userLine = StdIn.readLine("q:")
