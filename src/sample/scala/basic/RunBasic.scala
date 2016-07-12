@@ -20,14 +20,10 @@ package com.spotai.sample
 package basic
 
 import scala.io.StdIn
-import scala.concurrent.duration._
-import scala.concurrent.Await
-import scala.language.postfixOps
 import scala.util.Random
 import math.max
 
 import com.spotai.Bot
-import com.spotai.state.{MemoryContext, SQLContext, BotContextType}
 
 object RunBasic {
 

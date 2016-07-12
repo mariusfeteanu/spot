@@ -25,13 +25,13 @@ import scala.concurrent.Await
 import scala.language.postfixOps
 import scala.util.Random
 import math.max
-import akka.actor.{ActorSystem, Props, Actor}
+import akka.actor.ActorSystem
 import akka.pattern.ask
 import akka.util.Timeout
 
 import com.spotai.actor.BotActor
 import com.spotai.actor.BotActor.BotQuestion
-import com.spotai.state.{MemoryContext, SQLContext, BotContextType}
+import com.spotai.state.MemoryContext
 
 object RunActor {
 
