@@ -73,6 +73,19 @@ We now have a response future that we can pass to our responsive system, or we c
 
 See `com.spotai.RunActor` for a simple example.
 
+### Slack integration
+
+Basic slack integration is available. The bot can just answer text questions in channels where it's allowed to post.
+
+You need to set the following two environment variables:
+
+- SLACK_BOT_NAME: name of the bot (I might find a way to get this from the token in the future)
+- SLACK_AUTH_TOKEN: the slack [authentication token](https://api.slack.com/bot-users).
+
+You then need to create a `com.spotai.integration.slack.SlackAdapter` object. You invoke its `listen` method to start talking, and its `stop` method when you are done.
+
+There is a sample available in the samples directory.
+
 ## Playing with it
 
 If you just want to take it for a test drive, a very small aiml file is built-in and an example of Main function are included.
@@ -85,6 +98,18 @@ You need:
 2. Sbt: http://www.scala-sbt.org/download.html
 
 Steps to test:
+
+1. Edit build.sbt to include the sample code by uncommenting this line:
+
+`unmanagedSourceDirectories in Compile += baseDirectory.value / "src" / "sample"`
+
+1. Include one of the available main classes by uncommenting one of the following:
+
+  1. For basic functionality: `mainClass in Compile  := Some("com.spotai.sample.basic.RunBasic")`
+
+  1. For actor based (try `ask new_bot_name` at the console when testing): `mainClass in Compile  := Some("com.spotai.sample.basic.RunActor")`
+
+  1. For slack integration (credentials need to be supplied): `mainClass in Compile  := Some("com.spotai.sample.integration.RunSlack")`
 
 2. ```sbt run```
 3. Chat with spot (it only knows how to say hi and remember a variable called X, if you don't add more aiml files)
