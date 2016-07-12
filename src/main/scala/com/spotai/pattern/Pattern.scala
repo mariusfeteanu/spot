@@ -18,6 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.spotai
 package pattern
 
+// import scala.annotation.tailrec
+
 import com.spotai.pattern.state.PatternContext
 import com.spotai.Bot
 
@@ -62,12 +64,16 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
   - return None if it doesn't match
   - returns the match context if matched
   */
+  def matches(input:Seq[String], context:PatternContext):Option[PatternContext] = {
+    matches(patternElements, input, context)
+  }
+
   // Turning off cyclomatic complexity checking here because
   // I have decided that a sequence of case statements is the best way to express this
   // I also turn off method lenth checking for the same reason
   // scalastyle:off cyclomatic.complexity
   // scalastyle:off  method.length
-  def matches(input:Seq[String], context:PatternContext):Option[PatternContext] = {
+  def matches(patternElements:List[PatternElement], input:Seq[String], context:PatternContext):Option[PatternContext] = {
     /* Look at the current input to see if it matches */
     input match {
       // We reached the end of the user input
@@ -88,30 +94,30 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
           // separated by placeholders
           case _:ThatPlaceholder
             => input.head match {
-              case "<THAT>" => Pattern(patternElements.tail).matches(input.tail, PatternContext(context.star, true))
+              case "<THAT>" => matches(patternElements.tail, input.tail, PatternContext(context.star, true))
               case _ => None
             }
           case _:TopicPlaceholder
             => input.head match {
-              case "<TOPIC>" => Pattern(patternElements.tail).matches(input.tail, context)
+              case "<TOPIC>" => matches(patternElements.tail, input.tail, context)
               case _ => None
             }
           // The underscore wildcard has highes priority
           case _:WildUnder /* We try to match the wild card on the tail*/
-            => Pattern(patternElements.tail).matches(input.tail, context.withStar(input.head)) match {
+            => matches(patternElements.tail, input.tail, context.withStar(input.head)) match {
               /* and if it doesn't work, try the full remaining pattern again */
-              case None => Pattern(patternElements).matches(input.tail, context.withStar(input.head))
+              case None => matches(patternElements, input.tail, context.withStar(input.head))
               /* Return the match we found */
               case found => found
             }
           // If the current word matches the current pattern we can continue
           case patternWord:PatternWord if patternWord.word == input.head.toUpperCase
-            => Pattern(patternElements.tail).matches(input.tail, context)
+            => matches(patternElements.tail, input.tail, context)
           // The start wildcard has lowest priority
           case _:WildStar /* We try to match the wild card on the tail*/
-            => Pattern(patternElements.tail).matches(input.tail, context.withStar(input.head)) match {
+            => matches(patternElements.tail, input.tail, context.withStar(input.head)) match {
               /* and if it doesn't work, try the full remaining pattern again */
-              case None => Pattern(patternElements).matches(input.tail, context.withStar(input.head))
+              case None => matches(patternElements, input.tail, context.withStar(input.head))
               /* Return the match we found */
               case found => found
             }
