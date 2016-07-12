@@ -18,8 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package com.spotai
 package pattern
 
-// import scala.annotation.tailrec
-
 import com.spotai.pattern.state.PatternContext
 import com.spotai.Bot
 
@@ -73,7 +71,7 @@ case class Pattern(patternElements:List[PatternElement]) extends Ordered[Pattern
   // I also turn off method lenth checking for the same reason
   // scalastyle:off cyclomatic.complexity
   // scalastyle:off  method.length
-  def matches(patternElements:List[PatternElement], input:Seq[String], context:PatternContext):Option[PatternContext] = {
+  private def matches(patternElements:List[PatternElement], input:Seq[String], context:PatternContext):Option[PatternContext] = {
     /* Look at the current input to see if it matches */
     input match {
       // We reached the end of the user input
